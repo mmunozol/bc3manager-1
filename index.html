@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.17 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.18 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -116,22 +116,20 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 /* Portrait */
 @media (orientation:portrait){
   #vb-body{flex-direction:column!important;}
-  /* Fila superior col1+col2 */
-  #vb-body #portrait-top{display:flex!important;flex-direction:row;flex:1 1 0;min-height:0;overflow:hidden;}
-  #vb-body #portrait-top>.vcol{flex:1 1 0;min-width:0;}
+  /* Fila con 2 columnas (top o bot) */
+  #vb-body .portrait-pair{display:flex!important;flex-direction:row;flex:1 1 0;min-height:0;overflow:hidden;}
+  #vb-body .portrait-pair>.vcol{flex:1 1 0;min-width:0;}
   /* Separadores en portrait — grandes para touch */
-  #vb-body #portrait-top>.col-sep{flex:0 0 10px!important;display:flex!important;background:var(--bd);cursor:col-resize;}
-  #vb-body .portrait-row-sep{flex:0 0 10px;background:var(--bd);cursor:row-resize;touch-action:none;}
-  /* Col-stack en portrait (2row landscape → stack vertical) */
-  #vb-body .col-stack{flex:1 1 0;width:100%;}
+  #vb-body .portrait-pair>.col-sep{flex:0 0 12px!important;display:flex!important;background:var(--bd);cursor:col-resize;border-left:2px solid var(--panel2);border-right:2px solid var(--panel2);}
+  #vb-body .portrait-row-sep{flex:0 0 12px;background:var(--bd);cursor:row-resize;touch-action:none;border-top:2px solid var(--panel2);border-bottom:2px solid var(--panel2);}
+  /* Col-stack en portrait (2row) */
+  #vb-body .col-stack{flex:1 1 0;width:100%;display:flex;flex-direction:column;}
   #vb-body .col-stack>.vcol{flex:1 1 0;}
-  #vb-body .col-stack>.row-sep{flex:0 0 10px;background:var(--bd);cursor:row-resize;touch-action:none;}
-  /* Visor abajo */
-  #col3{flex:1 1 0;min-height:160px;}
+  #vb-body .col-stack>.row-sep{flex:0 0 12px;background:var(--bd);cursor:row-resize;touch-action:none;border-top:2px solid var(--panel2);border-bottom:2px solid var(--panel2);}
+  /* Visor */
+  #col3{flex:1 1 0;min-height:120px;}
   /* Ocultar seps de landscape */
   #vb-body>.col-sep{display:none!important;}
-  .vcol.col-min{flex:0 0 32px!important;min-width:0!important;width:100%!important;}
-  .vcol.col-min .col-header{writing-mode:horizontal-tb;padding:4px 10px;}
 }
 @media (pointer:coarse){
   .btn,.t3,.tab{min-height:38px;min-width:38px;}
@@ -562,7 +560,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.17</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.18</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -601,7 +599,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.17</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.18</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -634,7 +632,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.17</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.18</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -799,11 +797,19 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
       <div style="margin-bottom:10px;">
         <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Plantilla</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;" id="gear-layout-btns">
+          <!-- Sin visor (2 paneles) -->
           <button class="lp-btn" data-layout="2col" title="Izquierda · Derecha">
             <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="19" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="24" y="1" width="19" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
           <button class="lp-btn" data-layout="2row" title="Arriba · Abajo">
             <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="42" height="11" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="16" width="42" height="11" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          </button>
+          <!-- Con visor (portrait) -->
+          <button class="lp-btn" data-layout="p-top" title="2 columnas arriba · Visor abajo">
+            <svg viewBox="0 0 44 36" width="44" height="36"><rect x="1" y="1" width="19" height="16" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="24" y="1" width="19" height="16" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="20" width="42" height="15" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          </button>
+          <button class="lp-btn" data-layout="p-bot" title="Visor arriba · 2 columnas abajo">
+            <svg viewBox="0 0 44 36" width="44" height="36"><rect x="1" y="1" width="42" height="15" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="20" width="19" height="15" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="24" y="20" width="19" height="15" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
           <button class="lp-btn" data-layout="3col" title="3 columnas">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="22" y="1" width="16" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="42" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
@@ -2251,20 +2257,20 @@ function toggleGhost(){
   var isoBtn=el('bn-iso');
   var isoActive=isoBtn&&isoBtn.classList.contains('a');
 
-  if(isoActive){
-    // Con aislamiento activo: ghost = hacer el resto visible/opaco sin perder la selección
+  if(isoActive && vsHl.length>0){
+    // Con aislamiento: alternar entre "solo selección sólida" y "selección + resto en xray"
     vsGhost=!vsGhost;
     if(vsGhost){
-      // Mostrar todo (resto visible opaco) pero mantener selección destacada
+      // Resto en xray, selección sólida (estado por defecto al aislar)
+      isoGhost(vsHl);
+    } else {
+      // Todo visible y sólido, selección sigue visible
       xscene.setObjectsXRayed(xscene.objectIds,false);
       xscene.setObjectsVisible(xscene.objectIds,true);
       xscene.setObjectsPickable(xscene.objectIds,true);
-    } else {
-      // Volver al aislamiento
-      isoGhost(vsHl);
     }
   } else {
-    // Sin aislamiento: comportamiento normal
+    // Sin aislamiento: ghost global
     vsGhost=!vsGhost;
     if(vsGhost){
       xscene.setObjectsXRayed(xscene.objectIds,true);
@@ -2859,10 +2865,12 @@ function _sbLoadPos(){
   // slot.stack = array de 2 sub-slots apilados verticalmente
   var LAYOUTS = {
     '2col':  { slots:['A','B'], ncols:2 },
-    '2row':  { slots:[{stack:['A','B']}], ncols:1 },  // stack vertical, sin visor
+    '2row':  { slots:[{stack:['A','B']}], ncols:1 },
     '3col':  { slots:['A','B','C'], ncols:3 },
     'left2': { slots:[{stack:['A','B']},'C'], ncols:2 },
-    'right2':{ slots:['A',{stack:['B','C']}], ncols:2 }
+    'right2':{ slots:['A',{stack:['B','C']}], ncols:2 },
+    'p-top': { slots:['A','B','C'], ncols:3, portraitOnly:true }, // portrait: 2col top + visor bot
+    'p-bot': { slots:['A','B','C'], ncols:3, portraitOnly:true }  // portrait: visor top + 2col bot
   };
 
   var slotAssign = { A:'col1', B:'col2', C:'col3' };
@@ -2884,8 +2892,9 @@ function _sbLoadPos(){
     if(noIfc() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
       curLayout='2col';
     }
-    // En portrait: forzar layout compatible (solo 2col o 2row)
-    if(isPortrait() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
+    // En portrait: forzar layout compatible
+    var portraitIncompat = curLayout==='3col'||curLayout==='left2'||curLayout==='right2';
+    if(isPortrait() && portraitIncompat){
       curLayout='2col';
     }
     if(!isPortrait()) buildDOM();
@@ -3035,35 +3044,53 @@ function _sbLoadPos(){
     Array.from(vbody.children).forEach(function(ch){
       if(ch.classList.contains('col-stack')||ch.classList.contains('col-sep')||
          ch.classList.contains('row-sep')||ch.classList.contains('portrait-row-sep')||
-         ch.id==='portrait-top') ch.remove();
+         ch.id==='portrait-top'||ch.id==='portrait-bot') ch.remove();
     });
 
     var hasVisor = c3 && !noIfc();
 
+    function makeTop(){ var d=document.createElement('div'); d.id='portrait-top'; d.className='portrait-pair'; return d; }
+    function makeBot(){ var d=document.createElement('div'); d.id='portrait-bot'; d.className='portrait-pair'; return d; }
+    function makeSep(cls,id){ var d=document.createElement('div'); d.className=cls; d.id=id; return d; }
+
     if(curLayout==='2row'){
-      // Arriba/abajo: col1 encima col2, sin visor (o visor abajo si hay IFC)
-      var stack=document.createElement('div');
-      stack.className='col-stack'; stack.id='col-stack-portrait';
-      var rs1=document.createElement('div'); rs1.className='row-sep'; rs1.id='rs-p1';
+      // col1 sobre col2, sin visor (o visor al final)
+      var stack=document.createElement('div'); stack.className='col-stack'; stack.id='col-stack-portrait';
+      var rs1=makeSep('row-sep','rs-p1');
       c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
       stack.appendChild(c1); stack.appendChild(rs1); stack.appendChild(c2);
       vbody.appendChild(stack);
+      makeRowDraggablePortrait(rs1, c1, c2);
       if(hasVisor){
-        var rsV=document.createElement('div'); rsV.className='portrait-row-sep'; rsV.id='portrait-rs';
+        var rsV=makeSep('portrait-row-sep','portrait-rs');
         vbody.appendChild(rsV); vbody.appendChild(c3);
         c3.style.flex='1 1 0';
         makeRowDraggablePortrait(rsV, stack, c3);
       }
-      makeRowDraggablePortrait(rs1, c1, c2);
+
+    } else if(curLayout==='p-bot' && hasVisor){
+      // Visor arriba, 2 columnas abajo
+      c3.style.flex='1 1 0';
+      vbody.appendChild(c3);
+      var rsV=makeSep('portrait-row-sep','portrait-rs');
+      vbody.appendChild(rsV);
+      var bot=makeBot();
+      var sep=makeSep('col-sep','col-sep-portrait');
+      c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
+      bot.appendChild(c1); bot.appendChild(sep); bot.appendChild(c2);
+      vbody.appendChild(bot);
+      makeRowDraggablePortrait(rsV, c3, bot);
+      makeDraggablePortrait(sep, c1, c2);
+
     } else {
-      // Default (2col, 3col, left2, right2): col1|col2 lado a lado arriba, visor abajo
-      var top=document.createElement('div'); top.id='portrait-top';
-      var sep=document.createElement('div'); sep.className='col-sep'; sep.id='col-sep-portrait';
+      // Default: 2col (o p-top): 2 columnas arriba, visor abajo
+      var top=makeTop();
+      var sep=makeSep('col-sep','col-sep-portrait');
       c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
       top.appendChild(c1); top.appendChild(sep); top.appendChild(c2);
       vbody.appendChild(top);
       if(hasVisor){
-        var rs=document.createElement('div'); rs.className='portrait-row-sep'; rs.id='portrait-rs';
+        var rs=makeSep('portrait-row-sep','portrait-rs');
         vbody.appendChild(rs); vbody.appendChild(c3);
         c3.style.flex='1 1 0';
         makeRowDraggablePortrait(rs, top, c3);
@@ -3078,7 +3105,7 @@ function _sbLoadPos(){
     function on(e){
       active=true; startX=cX(e);
       startW=left.getBoundingClientRect().width;
-      var topEl=sep.closest('#portrait-top')||vbody;
+      var topEl=sep.closest('.portrait-pair')||vbody;
       maxW=topEl.getBoundingClientRect().width - 10/*sep*/ - 100/*min right*/;
       document.body.style.userSelect='none'; e.preventDefault();
     }
@@ -3227,18 +3254,21 @@ function _sbLoadPos(){
     if(gearLayoutBtns){
       var portrait = isPortrait();
       var hasIfc   = !noIfc();
-      // Portrait: solo 2col y 2row (no tiene sentido más en vertical)
-      // Landscape sin IFC: solo 2col y 2row
+      // Portrait sin visor: solo 2col, 2row
+      // Portrait con visor: 2col, 2row, p-top, p-bot
+      // Landscape sin IFC: solo 2col, 2row
       // Landscape con IFC: solo 3col, left2, right2
-      var show2 = portrait || !hasIfc;
-      var show3 = !portrait && hasIfc;
       ['2col','2row'].forEach(function(l){
         var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
-        if(b) b.style.display = show2 ? '' : 'none';
+        if(b) b.style.display = (portrait || !hasIfc) ? '' : 'none';
+      });
+      ['p-top','p-bot'].forEach(function(l){
+        var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
+        if(b) b.style.display = (portrait && hasIfc) ? '' : 'none';
       });
       ['3col','left2','right2'].forEach(function(l){
         var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
-        if(b) b.style.display = show3 ? '' : 'none';
+        if(b) b.style.display = (!portrait && hasIfc) ? '' : 'none';
       });
     }
     if(btnGear) btnGear.classList.toggle('a', layout!=='2col');
@@ -3480,9 +3510,13 @@ on('bn-iso','click',function(){
   if(this.classList.contains('a')){
     showAll();
     this.classList.remove('a');
+    vsGhost=false;
+    el('bn-ghost').classList.remove('a');
   } else if(vsHl.length>0){
     isoGhost(vsHl);
     this.classList.add('a');
+    vsGhost=true;
+    el('bn-ghost').classList.add('a');
   } else {
     st3('Selecciona primero una partida o un elemento','sp');
   }
