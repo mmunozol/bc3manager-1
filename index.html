@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.16 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.17 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -562,7 +562,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.16</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.17</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -601,7 +601,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.16</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.17</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -634,7 +634,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.16</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.17</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -2248,19 +2248,31 @@ function togglePartColors(){
 
 function toggleGhost(){
   if(!xv||!xscene)return;
-  vsGhost=!vsGhost;
-  if(vsGhost){
-    // Activar ghost: todo en xray excepto la selección activa
-    xscene.setObjectsXRayed(xscene.objectIds,true);
-    xscene.setObjectsPickable(xscene.objectIds,false);
-    if(vsHl.length>0){
-      xscene.setObjectsXRayed(vsHl,false);
-      xscene.setObjectsPickable(vsHl,true);
+  var isoBtn=el('bn-iso');
+  var isoActive=isoBtn&&isoBtn.classList.contains('a');
+
+  if(isoActive){
+    // Con aislamiento activo: ghost = hacer el resto visible/opaco sin perder la selección
+    vsGhost=!vsGhost;
+    if(vsGhost){
+      // Mostrar todo (resto visible opaco) pero mantener selección destacada
+      xscene.setObjectsXRayed(xscene.objectIds,false);
+      xscene.setObjectsVisible(xscene.objectIds,true);
+      xscene.setObjectsPickable(xscene.objectIds,true);
+    } else {
+      // Volver al aislamiento
+      isoGhost(vsHl);
     }
   } else {
-    // Desactivar ghost: si hay selección activa mantenerla aislada, si no mostrar todo
-    if(vsHl.length>0){
-      isoGhost(vsHl); // mantiene selección visible, resto en xray pero sin ghost
+    // Sin aislamiento: comportamiento normal
+    vsGhost=!vsGhost;
+    if(vsGhost){
+      xscene.setObjectsXRayed(xscene.objectIds,true);
+      xscene.setObjectsPickable(xscene.objectIds,false);
+      if(vsHl.length>0){
+        xscene.setObjectsXRayed(vsHl,false);
+        xscene.setObjectsPickable(vsHl,true);
+      }
     } else {
       showAll();
     }
@@ -2868,8 +2880,12 @@ function _sbLoadPos(){
   // ── Aplicar layout ────────────────────────────────────────────────────────
   function applyLayout(layout){
     if(layout) curLayout = layout;
-    // Si no hay IFC forzar layout 2 col
+    // Sin IFC: forzar layout 2 paneles
     if(noIfc() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
+      curLayout='2col';
+    }
+    // En portrait: forzar layout compatible (solo 2col o 2row)
+    if(isPortrait() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
       curLayout='2col';
     }
     if(!isPortrait()) buildDOM();
@@ -3208,16 +3224,21 @@ function _sbLoadPos(){
         r.setAttribute('stroke', isActive ? 'var(--acc)' : 'var(--bd)');
       });
     });
-    // Con IFC: ocultar 2col, mostrar 3col. Sin IFC: mostrar 2col, ocultar 3col.
     if(gearLayoutBtns){
-      var hasIfc = !noIfc();
+      var portrait = isPortrait();
+      var hasIfc   = !noIfc();
+      // Portrait: solo 2col y 2row (no tiene sentido más en vertical)
+      // Landscape sin IFC: solo 2col y 2row
+      // Landscape con IFC: solo 3col, left2, right2
+      var show2 = portrait || !hasIfc;
+      var show3 = !portrait && hasIfc;
       ['2col','2row'].forEach(function(l){
         var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
-        if(b) b.style.display = hasIfc ? 'none' : '';
+        if(b) b.style.display = show2 ? '' : 'none';
       });
       ['3col','left2','right2'].forEach(function(l){
         var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
-        if(b) b.style.display = hasIfc ? '' : 'none';
+        if(b) b.style.display = show3 ? '' : 'none';
       });
     }
     if(btnGear) btnGear.classList.toggle('a', layout!=='2col');
