@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.13 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.15 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -558,7 +558,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.13</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.15</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -597,7 +597,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.13</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.15</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -630,7 +630,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.13</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.15</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -644,7 +644,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
       <input type="file" id="fmeta" style="position:absolute;left:-9999px;" accept=".json">
       <input type="file" id="fbc3r" style="position:absolute;left:-9999px;" accept=".bc3,.BC3">
       <button class="btn" id="bn-search" style="display:inline-flex;align-items:center;gap:5px;" title="Buscar partida"><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Buscar</button>
-      <button class="btn p" id="bn-ifc" style="display:inline-flex;align-items:center;gap:5px;" title="Modelo IFC / XKT"><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>IFC</button>
+      <button class="btn p" id="bn-ifc" style="display:inline-flex;align-items:center;gap:5px;" title="Modelo 3D"><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>3D</button>
       <span class="sd" id="sd"></span>
       <span id="sm" style="font-size:11px;color:var(--muted);">—</span>
       <button class="btn" id="bn-gear" title="Opciones" style="display:flex;align-items:center;justify-content:center;padding:0;width:32px;height:32px;margin-left:2px;">
@@ -795,11 +795,11 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
       <div style="margin-bottom:10px;">
         <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Plantilla</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;" id="gear-layout-btns">
-          <button class="lp-btn" data-layout="2col-wide" title="⅓ Presupuesto · ⅔ Detalle">
-            <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="13" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="17" y="1" width="26" height="26" rx="2" fill="var(--acc-bg)" stroke="var(--acc)" stroke-width="1.5"/></svg>
-          </button>
-          <button class="lp-btn" data-layout="2col" title="½ · ½">
+          <button class="lp-btn" data-layout="2col" title="Izquierda · Derecha">
             <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="19" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="24" y="1" width="19" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          </button>
+          <button class="lp-btn" data-layout="2row" title="Arriba · Abajo">
+            <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="42" height="11" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="16" width="42" height="11" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
           <button class="lp-btn" data-layout="3col" title="3 columnas">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="22" y="1" width="16" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="42" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
@@ -2832,18 +2832,16 @@ function _sbLoadPos(){
   // Layouts: array de slots. Cada slot: { id, flex, stack? }
   // slot.stack = array de 2 sub-slots apilados verticalmente
   var LAYOUTS = {
-    '2col-wide': { slots:['A','B'], ncols:2 },
-    '2col':      { slots:['A','B'], ncols:2 },
-    '3col':      { slots:['A','B','C'], ncols:3 },
-    'left2':     { slots:[{stack:['A','B']},'C'], ncols:2 },
-    'right2':    { slots:['A',{stack:['B','C']}], ncols:2 }
+    '2col':  { slots:['A','B'], ncols:2 },
+    '2row':  { slots:[{stack:['A','B']}], ncols:1 },  // stack vertical, sin visor
+    '3col':  { slots:['A','B','C'], ncols:3 },
+    'left2': { slots:[{stack:['A','B']},'C'], ncols:2 },
+    'right2':{ slots:['A',{stack:['B','C']}], ncols:2 }
   };
 
-  // Asignación slot → panel. Defaults sensatos.
   var slotAssign = { A:'col1', B:'col2', C:'col3' };
-  var curLayout  = '2col-wide';
-  // Tamaños de columna principales (px, para col flexible izquierda)
-  var colW = [300, 260]; // [col izq, col centro] en layouts 3col
+  var curLayout  = '2col';
+  var colW = [300, 260];
 
   function isPortrait(){
     // Usar solo orientación — iPads tienen >700px de ancho en portrait
@@ -2858,7 +2856,7 @@ function _sbLoadPos(){
     if(layout) curLayout = layout;
     // Si no hay IFC forzar layout 2 col
     if(noIfc() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
-      curLayout='2col-wide';
+      curLayout='2col';
     }
     if(!isPortrait()) buildDOM();
     else buildPortrait();
@@ -2950,16 +2948,14 @@ function _sbLoadPos(){
     var seps = vbody.querySelectorAll('.col-sep').length;
     var avail = W - seps*4;
 
-    if(curLayout==='2col-wide'){
+    if(curLayout==='2col'){
       var w1=Math.max(MIN, Math.min(colW[0], avail-MIN));
       flexEl(slotAssign['A'], '0 0 '+w1+'px');
       flexEl(slotAssign['B'], '1 1 0');
-      hideVisor(true);
-    } else if(curLayout==='2col'){
-      var w1=Math.round(avail/2);
-      flexEl(slotAssign['A'], '0 0 '+w1+'px');
+    } else if(curLayout==='2row'){
+      // Stack vertical: ambos paneles flex:1, sin separadores col
+      flexEl(slotAssign['A'], '1 1 0');
       flexEl(slotAssign['B'], '1 1 0');
-      hideVisor(true);
     } else if(curLayout==='3col'){
       var w1=Math.max(MIN,Math.min(colW[0],avail*0.32));
       var w2=Math.max(MIN,Math.min(colW[1],avail*0.28));
@@ -3101,9 +3097,7 @@ function _sbLoadPos(){
       // Calcular maxW UNA sola vez al inicio (sin reflow en move)
       var totalW   = vbody.getBoundingClientRect().width;
       var sepCount = vbody.querySelectorAll('.col-sep').length;
-      var rightEl  = sep.nextElementSibling;
-      var rightW   = rightEl ? rightEl.getBoundingClientRect().width : MIN;
-      maxW = totalW - sepCount*4 - Math.max(MIN, rightW);
+      maxW = totalW - sepCount*4 - MIN;
       sep.classList.add('active');
       document.body.style.cursor='col-resize';
       document.body.style.userSelect='none';
@@ -3192,7 +3186,7 @@ function _sbLoadPos(){
     // Con IFC: ocultar 2col, mostrar 3col. Sin IFC: mostrar 2col, ocultar 3col.
     if(gearLayoutBtns){
       var hasIfc = !noIfc();
-      ['2col-wide','2col'].forEach(function(l){
+      ['2col','2row'].forEach(function(l){
         var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
         if(b) b.style.display = hasIfc ? 'none' : '';
       });
@@ -3201,7 +3195,7 @@ function _sbLoadPos(){
         if(b) b.style.display = hasIfc ? '' : 'none';
       });
     }
-    if(btnGear) btnGear.classList.toggle('a', layout!=='2col-wide');
+    if(btnGear) btnGear.classList.toggle('a', layout!=='2col');
   }
 
   // ── Slot UI — asignar contenido a cada hueco ─────────────────────────────
@@ -3211,8 +3205,8 @@ function _sbLoadPos(){
     {value:'col3', label:'Visor 3D'}
   ];
   var SLOT_KEYS_MAP = {
-    '2col-wide': ['A','B'],
-    '2col':      ['A','B'],
+    '2col': ['A','B'],
+    '2row': ['A','B'],
     '3col':      ['A','B','C'],
     'left2':     ['A','B','C'],
     'right2':    ['A','B','C']
@@ -3593,12 +3587,12 @@ function syncIfcBtn(){
   if(noModel){
     // Sin modelo: botón abre modal, aspecto neutro
     btn.classList.remove('a');
-    btn.title='Cargar modelo IFC/XKT';
+    btn.title='Cargar modelo 3D';
   } else {
     // Con modelo: botón es toggle — activo cuando el visor está visible
     var hidden=body&&body.classList.contains('ifc-hidden');
     btn.classList.toggle('a',!hidden);
-    btn.title=hidden?'Mostrar visor 3D':'Ocultar visor 3D';
+    btn.title=hidden?'Mostrar 3D':'Ocultar 3D';
   }
 }
 
