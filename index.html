@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.20 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.21 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -560,7 +560,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.20</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.21</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -599,7 +599,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.20</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.21</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -632,7 +632,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.20</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.21</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -826,9 +826,6 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
           </button>
           <button class="lp-btn lp-ls3" data-layout="right2" title="Izq · 2 filas der">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="24" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="1" width="30" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="15" width="30" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <button class="lp-btn lp-ls3" data-layout="l-top" title="2 columnas arriba · Visor abajo">
-            <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="28" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="33" y="1" width="26" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="33" y="15" width="26" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
         </div>
       </div>
@@ -2879,7 +2876,6 @@ function _sbLoadPos(){
     '3col':  { slots:['A','B','C'], ncols:3 },
     'left2': { slots:[{stack:['A','B']},'C'], ncols:2 },
     'right2':{ slots:['A',{stack:['B','C']}], ncols:2 },
-    'l-top': { slots:['A',{stack:['B','C']}], ncols:2 }, // visor der, presup+det apilados izq — reusa right2 pero con slot C=visor der
     'p-top': { slots:['A','B','C'], ncols:3, portraitOnly:true },
     'p-bot': { slots:['A','B','C'], ncols:3, portraitOnly:true }
   };
@@ -2900,11 +2896,11 @@ function _sbLoadPos(){
   function applyLayout(layout){
     if(layout) curLayout = layout;
     // Sin IFC: forzar layout 2 paneles
-    if(noIfc() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2'||curLayout==='l-top')){
+    if(noIfc() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
       curLayout='2col';
     }
     // En portrait: forzar layout compatible
-    var portraitIncompat = curLayout==='3col'||curLayout==='left2'||curLayout==='right2'||curLayout==='l-top';
+    var portraitIncompat = curLayout==='3col'||curLayout==='left2'||curLayout==='right2';
     if(isPortrait() && portraitIncompat){
       curLayout='2col';
     }
@@ -3022,7 +3018,7 @@ function _sbLoadPos(){
       if(colRight) colRight.style.flex='1 1 0';
       flexEl(slotAssign['A'],'1 1 0'); flexEl(slotAssign['B'],'1 1 0');
       hideVisor(false);
-    } else if(curLayout==='right2'||curLayout==='l-top'){
+    } else if(curLayout==='right2'){
       var colLeft=document.getElementById(slotAssign['A']);
       var stackEl=vbody.querySelector('.col-stack');
       var w=Math.max(MIN,Math.min(colW[0],avail*0.38));
@@ -3060,53 +3056,63 @@ function _sbLoadPos(){
 
     var hasVisor = c3 && !noIfc();
 
+    // Helpers
     function makeTop(){ var d=document.createElement('div'); d.id='portrait-top'; d.className='portrait-pair'; return d; }
     function makeBot(){ var d=document.createElement('div'); d.id='portrait-bot'; d.className='portrait-pair'; return d; }
     function makeSep(cls,id){ var d=document.createElement('div'); d.className=cls; d.id=id; return d; }
+    // Obtener panel por slot usando slotAssign
+    function panelA(){ return document.getElementById(slotAssign['A']); }
+    function panelB(){ return document.getElementById(slotAssign['B']); }
+    function panelC(){ return document.getElementById(slotAssign['C']); }
 
     if(curLayout==='2row'){
-      // col1 sobre col2, sin visor (o visor al final)
+      // col A sobre col B, sin visor
+      var pA=panelA(), pB=panelB();
       var stack=document.createElement('div'); stack.className='col-stack'; stack.id='col-stack-portrait';
       var rs1=makeSep('row-sep','rs-p1');
-      c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
-      stack.appendChild(c1); stack.appendChild(rs1); stack.appendChild(c2);
+      pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
+      stack.appendChild(pA); stack.appendChild(rs1); stack.appendChild(pB);
       vbody.appendChild(stack);
-      makeRowDraggablePortrait(rs1, c1, c2);
-      if(hasVisor){
-        var rsV=makeSep('portrait-row-sep','portrait-rs');
-        vbody.appendChild(rsV); vbody.appendChild(c3);
-        c3.style.flex='1 1 0';
-        makeRowDraggablePortrait(rsV, stack, c3);
-      }
+      makeRowDraggablePortrait(rs1, pA, pB);
 
-    } else if(curLayout==='p-bot' && hasVisor){
-      // Visor arriba, 2 columnas abajo
-      c3.style.flex='1 1 0';
-      vbody.appendChild(c3);
+    } else if((curLayout==='p-bot') && hasVisor){
+      // Slot C arriba (visor), A+B abajo en columnas
+      var pA=panelA(), pB=panelB(), pC=panelC();
+      pC.style.flex='1 1 0';
+      vbody.appendChild(pC);
       var rsV=makeSep('portrait-row-sep','portrait-rs');
       vbody.appendChild(rsV);
       var bot=makeBot();
       var sep=makeSep('col-sep','col-sep-portrait');
-      c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
-      bot.appendChild(c1); bot.appendChild(sep); bot.appendChild(c2);
+      pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
+      bot.appendChild(pA); bot.appendChild(sep); bot.appendChild(pB);
       vbody.appendChild(bot);
-      makeRowDraggablePortrait(rsV, c3, bot);
-      makeDraggablePortrait(sep, c1, c2);
+      makeRowDraggablePortrait(rsV, pC, bot);
+      makeDraggablePortrait(sep, pA, pB);
 
-    } else {
-      // Default: 2col (o p-top): 2 columnas arriba, visor abajo
+    } else if((curLayout==='p-top') && hasVisor){
+      // Slots A+B arriba en columnas, C abajo (visor)
+      var pA=panelA(), pB=panelB(), pC=panelC();
       var top=makeTop();
       var sep=makeSep('col-sep','col-sep-portrait');
-      c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
-      top.appendChild(c1); top.appendChild(sep); top.appendChild(c2);
+      pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
+      top.appendChild(pA); top.appendChild(sep); top.appendChild(pB);
       vbody.appendChild(top);
-      if(hasVisor){
-        var rs=makeSep('portrait-row-sep','portrait-rs');
-        vbody.appendChild(rs); vbody.appendChild(c3);
-        c3.style.flex='1 1 0';
-        makeRowDraggablePortrait(rs, top, c3);
-      }
-      makeDraggablePortrait(sep, c1, c2);
+      var rs=makeSep('portrait-row-sep','portrait-rs');
+      pC.style.flex='1 1 0';
+      vbody.appendChild(rs); vbody.appendChild(pC);
+      makeRowDraggablePortrait(rs, top, pC);
+      makeDraggablePortrait(sep, pA, pB);
+
+    } else {
+      // Default 2col: A+B lado a lado
+      var pA=panelA(), pB=panelB();
+      var top=makeTop();
+      var sep=makeSep('col-sep','col-sep-portrait');
+      pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
+      top.appendChild(pA); top.appendChild(sep); top.appendChild(pB);
+      vbody.appendChild(top);
+      makeDraggablePortrait(sep, pA, pB);
     }
   }
 
@@ -3274,7 +3280,7 @@ function _sbLoadPos(){
         b.style.display = (!portrait && !hasIfc) ? '' : 'none';
       });
       gearLayoutBtns.querySelectorAll('.lp-pt').forEach(function(b){
-        b.style.display = portrait ? '' : 'none';
+        b.style.display = (portrait && !hasIfc) ? '' : 'none';
       });
       gearLayoutBtns.querySelectorAll('.lp-pt3').forEach(function(b){
         b.style.display = (portrait && hasIfc) ? '' : 'none';
@@ -3297,11 +3303,13 @@ function _sbLoadPos(){
     {value:'col3', label:'Visor 3D'}
   ];
   var SLOT_KEYS_MAP = {
-    '2col': ['A','B'],
-    '2row': ['A','B'],
-    '3col':      ['A','B','C'],
-    'left2':     ['A','B','C'],
-    'right2':    ['A','B','C']
+    '2col':  ['A','B'],
+    '2row':  ['A','B'],
+    '3col':  ['A','B','C'],
+    'left2': ['A','B','C'],
+    'right2':['A','B','C'],
+    'p-top': ['A','B','C'],
+    'p-bot': ['A','B','C']
   };
 
   function buildSlotUI(){
