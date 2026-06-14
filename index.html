@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.10 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.11 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -89,8 +89,8 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 #vb-body{flex:1;display:flex;overflow:hidden;background:var(--bg);}
 .vcol{display:flex;flex-direction:column;overflow:hidden;background:var(--panel);min-width:0;position:relative;flex-shrink:0;}
 /* Sin modelo IFC */
-#vb-body.no-model #col3,#vb-body.no-model #col-sep23{display:none!important;}
-#vb-body.ifc-hidden #col3,#vb-body.ifc-hidden #col-sep23{display:none!important;}
+#vb-body.no-model #col3,#vb-body.no-model .col-sep-visor{display:none!important;}
+#vb-body.ifc-hidden #col3,#vb-body.ifc-hidden .col-sep-visor{display:none!important;}
 /* Separadores redimensionables */
 .col-sep{flex:0 0 4px;background:var(--bd);cursor:col-resize;position:relative;z-index:5;touch-action:none;transition:background .12s;}
 .col-sep:hover,.col-sep.active{background:var(--acc);}
@@ -208,9 +208,9 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 .css .n{font-size:16px;font-weight:600;display:block;}
 .mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center;}
 /* Layout picker buttons */
-.lp-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 10px;border:1.5px solid var(--bd);border-radius:7px;background:var(--panel2);cursor:pointer;font-size:9px;color:var(--muted);transition:all .12s;}
+.lp-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 8px;border:2px solid var(--bd);border-radius:7px;background:var(--panel2);cursor:pointer;transition:all .12s;}
 .lp-btn:hover{border-color:var(--acc);background:var(--acc-bg);}
-.lp-btn.active{border-color:var(--acc);background:var(--acc-bg);color:var(--acc);font-weight:600;}
+.lp-btn.active{border-color:var(--acc);background:var(--acc-bg);box-shadow:0 0 0 2px var(--acc);}
 /* Gear panel sections */
 .gear-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin-bottom:8px;}
 .gear-file-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--bd);border-radius:7px;cursor:pointer;background:var(--panel2);transition:border-color .12s;}
@@ -553,7 +553,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.10</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.11</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -592,7 +592,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.10</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.11</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -625,7 +625,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.10</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.11</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -795,23 +795,18 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
         <div style="display:flex;gap:6px;flex-wrap:wrap;" id="gear-layout-btns">
           <button class="lp-btn" data-layout="2col-wide" title="⅓ Presupuesto · ⅔ Detalle">
             <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="13" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="17" y="1" width="26" height="26" rx="2" fill="var(--acc-bg)" stroke="var(--acc)" stroke-width="1.5"/></svg>
-            <span>⅓·⅔</span>
           </button>
           <button class="lp-btn" data-layout="2col" title="½ · ½">
             <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="19" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="24" y="1" width="19" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-            <span>½·½</span>
           </button>
           <button class="lp-btn" data-layout="3col" title="3 columnas">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="22" y="1" width="16" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="42" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-            <span>3 col</span>
           </button>
           <button class="lp-btn" data-layout="left2" title="2 filas izq · Visor der">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="24" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="15" width="24" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="1" width="30" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-            <span>2f·1</span>
           </button>
           <button class="lp-btn" data-layout="right2" title="Izq · 2 filas der">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="24" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="1" width="30" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="15" width="30" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-            <span>1·2f</span>
           </button>
         </div>
       </div>
@@ -2919,6 +2914,27 @@ function _sbLoadPos(){
 
     applyFlex(W);
     initSeps();
+
+    // col3 SIEMPRE en vbody (CSS no-model/ifc-hidden lo oculta)
+    var col3 = document.getElementById('col3');
+    if(col3){
+      // Quitar clase visor de todos los seps existentes
+      vbody.querySelectorAll('.col-sep-visor').forEach(function(s){ s.classList.remove('col-sep-visor'); });
+      // Si col3 no está ya en un stack dentro de vbody, añadirlo al final
+      if(col3.parentNode !== vbody && !col3.closest('#vb-body .col-stack')){
+        // Añadir separador antes de col3
+        var sepV = document.createElement('div');
+        sepV.className = 'col-sep col-sep-visor'; sepV.id = 'col-sep-v';
+        vbody.appendChild(sepV);
+        vbody.appendChild(col3);
+        initSeps(); // reinicializar seps incluyendo el nuevo
+      } else {
+        // Marcar el sep inmediatamente anterior a col3
+        var prev = col3.previousElementSibling;
+        if(prev && prev.classList.contains('col-sep')) prev.classList.add('col-sep-visor');
+      }
+    }
+
     // Restaurar visibilidad
     ['col1','col2','col3'].forEach(function(id){
       var p=document.getElementById(id); if(p) p.style.visibility='';
@@ -3081,7 +3097,13 @@ function _sbLoadPos(){
 
   function markActive(layout){
     if(gearLayoutBtns) gearLayoutBtns.querySelectorAll('.lp-btn').forEach(function(b){
-      b.classList.toggle('active', b.dataset.layout===layout);
+      var isActive = b.dataset.layout===layout;
+      b.classList.toggle('active', isActive);
+      // Colorear todos los rects del SVG en azul cuando activo
+      b.querySelectorAll('svg rect').forEach(function(r){
+        r.setAttribute('fill', isActive ? 'var(--acc-bg)' : 'var(--panel2)');
+        r.setAttribute('stroke', isActive ? 'var(--acc)' : 'var(--bd)');
+      });
     });
     // Ocultar layouts de 3 paneles si no hay IFC
     if(gearLayoutBtns){
