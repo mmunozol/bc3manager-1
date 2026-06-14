@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.18 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.20 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -560,7 +560,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.18</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.20</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -599,7 +599,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.18</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.20</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -632,7 +632,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.18</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.20</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -797,28 +797,38 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
       <div style="margin-bottom:10px;">
         <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Plantilla</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;" id="gear-layout-btns">
-          <!-- Sin visor (2 paneles) -->
-          <button class="lp-btn" data-layout="2col" title="Izquierda · Derecha">
-            <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="19" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="24" y="1" width="19" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          <!-- Landscape sin visor -->
+          <button class="lp-btn lp-ls" data-layout="2col" title="Izquierda · Derecha">
+            <svg viewBox="0 0 40 26" width="40" height="26"><rect x="1" y="1" width="17" height="24" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="22" y="1" width="17" height="24" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
-          <button class="lp-btn" data-layout="2row" title="Arriba · Abajo">
-            <svg viewBox="0 0 44 28" width="44" height="28"><rect x="1" y="1" width="42" height="11" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="16" width="42" height="11" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          <button class="lp-btn lp-ls" data-layout="2row" title="Arriba · Abajo">
+            <svg viewBox="0 0 40 26" width="40" height="26"><rect x="1" y="1" width="38" height="10" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="15" width="38" height="10" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
-          <!-- Con visor (portrait) -->
-          <button class="lp-btn" data-layout="p-top" title="2 columnas arriba · Visor abajo">
-            <svg viewBox="0 0 44 36" width="44" height="36"><rect x="1" y="1" width="19" height="16" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="24" y="1" width="19" height="16" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="20" width="42" height="15" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          <!-- Portrait sin visor -->
+          <button class="lp-btn lp-pt" data-layout="2col" title="Columnas">
+            <svg viewBox="0 0 26 40" width="26" height="40"><rect x="1" y="1" width="10" height="38" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="15" y="1" width="10" height="38" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
-          <button class="lp-btn" data-layout="p-bot" title="Visor arriba · 2 columnas abajo">
-            <svg viewBox="0 0 44 36" width="44" height="36"><rect x="1" y="1" width="42" height="15" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="20" width="19" height="15" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="24" y="20" width="19" height="15" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          <button class="lp-btn lp-pt" data-layout="2row" title="Filas">
+            <svg viewBox="0 0 26 40" width="26" height="40"><rect x="1" y="1" width="24" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="22" width="24" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
-          <button class="lp-btn" data-layout="3col" title="3 columnas">
+          <!-- Portrait con visor -->
+          <button class="lp-btn lp-pt3" data-layout="p-top" title="2 columnas arriba · Visor abajo">
+            <svg viewBox="0 0 26 40" width="26" height="40"><rect x="1" y="1" width="10" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="15" y="1" width="10" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="22" width="24" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          </button>
+          <button class="lp-btn lp-pt3" data-layout="p-bot" title="Visor arriba · 2 columnas abajo">
+            <svg viewBox="0 0 26 40" width="26" height="40"><rect x="1" y="1" width="24" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="22" width="10" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="15" y="22" width="10" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          </button>
+          <button class="lp-btn lp-ls3" data-layout="3col" title="3 columnas">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="22" y="1" width="16" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="42" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
-          <button class="lp-btn" data-layout="left2" title="2 filas izq · Visor der">
+          <button class="lp-btn lp-ls3" data-layout="left2" title="2 filas izq · Visor der">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="24" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="15" width="24" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="1" width="30" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
-          <button class="lp-btn" data-layout="right2" title="Izq · 2 filas der">
+          <button class="lp-btn lp-ls3" data-layout="right2" title="Izq · 2 filas der">
             <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="24" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="1" width="30" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="15" width="30" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
+          </button>
+          <button class="lp-btn lp-ls3" data-layout="l-top" title="2 columnas arriba · Visor abajo">
+            <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="28" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="33" y="1" width="26" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="33" y="15" width="26" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
           </button>
         </div>
       </div>
@@ -2869,8 +2879,9 @@ function _sbLoadPos(){
     '3col':  { slots:['A','B','C'], ncols:3 },
     'left2': { slots:[{stack:['A','B']},'C'], ncols:2 },
     'right2':{ slots:['A',{stack:['B','C']}], ncols:2 },
-    'p-top': { slots:['A','B','C'], ncols:3, portraitOnly:true }, // portrait: 2col top + visor bot
-    'p-bot': { slots:['A','B','C'], ncols:3, portraitOnly:true }  // portrait: visor top + 2col bot
+    'l-top': { slots:['A',{stack:['B','C']}], ncols:2 }, // visor der, presup+det apilados izq — reusa right2 pero con slot C=visor der
+    'p-top': { slots:['A','B','C'], ncols:3, portraitOnly:true },
+    'p-bot': { slots:['A','B','C'], ncols:3, portraitOnly:true }
   };
 
   var slotAssign = { A:'col1', B:'col2', C:'col3' };
@@ -2889,11 +2900,11 @@ function _sbLoadPos(){
   function applyLayout(layout){
     if(layout) curLayout = layout;
     // Sin IFC: forzar layout 2 paneles
-    if(noIfc() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
+    if(noIfc() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2'||curLayout==='l-top')){
       curLayout='2col';
     }
     // En portrait: forzar layout compatible
-    var portraitIncompat = curLayout==='3col'||curLayout==='left2'||curLayout==='right2';
+    var portraitIncompat = curLayout==='3col'||curLayout==='left2'||curLayout==='right2'||curLayout==='l-top';
     if(isPortrait() && portraitIncompat){
       curLayout='2col';
     }
@@ -3011,7 +3022,7 @@ function _sbLoadPos(){
       if(colRight) colRight.style.flex='1 1 0';
       flexEl(slotAssign['A'],'1 1 0'); flexEl(slotAssign['B'],'1 1 0');
       hideVisor(false);
-    } else if(curLayout==='right2'){
+    } else if(curLayout==='right2'||curLayout==='l-top'){
       var colLeft=document.getElementById(slotAssign['A']);
       var stackEl=vbody.querySelector('.col-stack');
       var w=Math.max(MIN,Math.min(colW[0],avail*0.38));
@@ -3254,21 +3265,26 @@ function _sbLoadPos(){
     if(gearLayoutBtns){
       var portrait = isPortrait();
       var hasIfc   = !noIfc();
-      // Portrait sin visor: solo 2col, 2row
-      // Portrait con visor: 2col, 2row, p-top, p-bot
-      // Landscape sin IFC: solo 2col, 2row
-      // Landscape con IFC: solo 3col, left2, right2
-      ['2col','2row'].forEach(function(l){
-        var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
-        if(b) b.style.display = (portrait || !hasIfc) ? '' : 'none';
+      // 4 casos:
+      // Landscape sin IFC  → lp-ls (2col,2row landscape)
+      // Landscape con IFC  → 3col, left2, right2
+      // Portrait sin IFC   → lp-pt (2col,2row portrait)
+      // Portrait con IFC   → lp-pt (2col,2row portrait) + lp-pt3 (p-top,p-bot)
+      gearLayoutBtns.querySelectorAll('.lp-ls').forEach(function(b){
+        b.style.display = (!portrait && !hasIfc) ? '' : 'none';
       });
-      ['p-top','p-bot'].forEach(function(l){
-        var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
-        if(b) b.style.display = (portrait && hasIfc) ? '' : 'none';
+      gearLayoutBtns.querySelectorAll('.lp-pt').forEach(function(b){
+        b.style.display = portrait ? '' : 'none';
       });
+      gearLayoutBtns.querySelectorAll('.lp-pt3').forEach(function(b){
+        b.style.display = (portrait && hasIfc) ? '' : 'none';
+      });
+      gearLayoutBtns.querySelectorAll('.lp-ls3').forEach(function(b){
+        b.style.display = (!portrait && hasIfc) ? '' : 'none';
+      });
+      // Eliminar los selectores viejos por data-layout para 3col etc
       ['3col','left2','right2'].forEach(function(l){
-        var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
-        if(b) b.style.display = (!portrait && hasIfc) ? '' : 'none';
+        // ya manejados por lp-ls3, no hacer nada adicional
       });
     }
     if(btnGear) btnGear.classList.toggle('a', layout!=='2col');
