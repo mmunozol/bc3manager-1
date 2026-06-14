@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.21 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.22 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -560,7 +560,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.21</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.22</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -599,7 +599,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.21</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.22</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -632,7 +632,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.21</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.22</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -2895,16 +2895,27 @@ function _sbLoadPos(){
   // ── Aplicar layout ────────────────────────────────────────────────────────
   function applyLayout(layout){
     if(layout) curLayout = layout;
+    var portrait = isPortrait();
+    var hasVisor = !noIfc();
+
     // Sin IFC: forzar layout 2 paneles
-    if(noIfc() && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
+    if(!hasVisor && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
       curLayout='2col';
     }
-    // En portrait: forzar layout compatible
-    var portraitIncompat = curLayout==='3col'||curLayout==='left2'||curLayout==='right2';
-    if(isPortrait() && portraitIncompat){
+    // Sin IFC en portrait: forzar 2 paneles
+    if(!hasVisor && (curLayout==='p-top'||curLayout==='p-bot')){
       curLayout='2col';
     }
-    if(!isPortrait()) buildDOM();
+    // En portrait: forzar layout compatible (landscape-only → 2col)
+    if(portrait && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
+      curLayout='2col';
+    }
+    // En portrait con IFC: si el layout es 2col/2row, auto-promover a p-top
+    if(portrait && hasVisor && (curLayout==='2col'||curLayout==='2row')){
+      curLayout='p-top';
+    }
+
+    if(!portrait) buildDOM();
     else buildPortrait();
     markActive(curLayout);
     buildSlotUI();
@@ -3105,13 +3116,20 @@ function _sbLoadPos(){
       makeDraggablePortrait(sep, pA, pB);
 
     } else {
-      // Default 2col: A+B lado a lado
+      // Default 2col / p-top: A+B lado a lado, C abajo si hay visor
       var pA=panelA(), pB=panelB();
       var top=makeTop();
       var sep=makeSep('col-sep','col-sep-portrait');
       pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
       top.appendChild(pA); top.appendChild(sep); top.appendChild(pB);
       vbody.appendChild(top);
+      if(hasVisor){
+        var pC=panelC();
+        var rs=makeSep('portrait-row-sep','portrait-rs');
+        pC.style.flex='1 1 0';
+        vbody.appendChild(rs); vbody.appendChild(pC);
+        makeRowDraggablePortrait(rs, top, pC);
+      }
       makeDraggablePortrait(sep, pA, pB);
     }
   }
