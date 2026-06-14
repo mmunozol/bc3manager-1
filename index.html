@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.12 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.13 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -558,7 +558,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.12</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.13</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -597,7 +597,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.12</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.13</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -630,7 +630,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.12</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.13</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -3090,35 +3090,39 @@ function _sbLoadPos(){
   }
 
   function makeDraggable(sep, axis, idx){
-    var active=false, start=0, startW=0, leftEl=null;
+    var active=false, startX=0, startW=0, leftEl=null, maxW=0;
     sep.addEventListener('mousedown', on); sep.addEventListener('touchstart', onT, {passive:false});
     function on(e){
-      active=true; start=e.clientX; sep.classList.add('active');
-      // El elemento a la izquierda del separador
-      leftEl=sep.previousElementSibling;
-      startW=leftEl?leftEl.offsetWidth:0;
-      document.body.style.cursor='col-resize'; document.body.style.userSelect='none';
+      leftEl = sep.previousElementSibling;
+      if(!leftEl) return;
+      active  = true;
+      startX  = cX(e);
+      startW  = leftEl.getBoundingClientRect().width;
+      // Calcular maxW UNA sola vez al inicio (sin reflow en move)
+      var totalW   = vbody.getBoundingClientRect().width;
+      var sepCount = vbody.querySelectorAll('.col-sep').length;
+      var rightEl  = sep.nextElementSibling;
+      var rightW   = rightEl ? rightEl.getBoundingClientRect().width : MIN;
+      maxW = totalW - sepCount*4 - Math.max(MIN, rightW);
+      sep.classList.add('active');
+      document.body.style.cursor='col-resize';
+      document.body.style.userSelect='none';
       e.preventDefault();
     }
     function onT(e){ on({clientX:e.touches[0].clientX,preventDefault:function(){e.preventDefault();}}); }
     document.addEventListener('mousemove', mv); document.addEventListener('touchmove', mvT, {passive:false});
     function mv(e){
-      if(!active||!leftEl)return;
-      var totalW = vbody.clientWidth;
-      var sepCount = vbody.querySelectorAll('.col-sep').length;
-      // Calcular el espacio que ocupan los elementos a la derecha del separador
-      var rightW = 0;
-      var sibling = sep.nextElementSibling;
-      while(sibling){ rightW += sibling.offsetWidth; sibling = sibling.nextElementSibling; }
-      var maxW = totalW - sepCount*4 - Math.max(MIN, rightW>0 ? rightW : MIN);
-      var nw = Math.max(MIN, Math.min(startW+(e.clientX-start), maxW));
-      leftEl.style.flex='0 0 '+nw+'px';
+      if(!active||!leftEl) return;
+      var delta = cX(e) - startX;
+      var nw    = Math.max(MIN, Math.min(startW + delta, maxW));
+      leftEl.style.flex = '0 0 '+nw+'px';
       if(idx===0) colW[0]=nw; else colW[1]=nw;
       notifyXeokit();
     }
     function mvT(e){ if(active){ mv({clientX:e.touches[0].clientX}); e.preventDefault(); } }
     document.addEventListener('mouseup', up); document.addEventListener('touchend', up, {passive:true});
     function up(){ if(!active)return; active=false; sep.classList.remove('active'); document.body.style.cursor=''; document.body.style.userSelect=''; }
+    function cX(e){ return e.clientX!==undefined ? e.clientX : e.pageX; }
   }
 
   function makeRowDraggable(sep){
@@ -3180,17 +3184,21 @@ function _sbLoadPos(){
     if(gearLayoutBtns) gearLayoutBtns.querySelectorAll('.lp-btn').forEach(function(b){
       var isActive = b.dataset.layout===layout;
       b.classList.toggle('active', isActive);
-      // Colorear todos los rects del SVG en azul cuando activo
       b.querySelectorAll('svg rect').forEach(function(r){
         r.setAttribute('fill', isActive ? 'var(--acc-bg)' : 'var(--panel2)');
         r.setAttribute('stroke', isActive ? 'var(--acc)' : 'var(--bd)');
       });
     });
-    // Ocultar layouts de 3 paneles si no hay IFC
+    // Con IFC: ocultar 2col, mostrar 3col. Sin IFC: mostrar 2col, ocultar 3col.
     if(gearLayoutBtns){
+      var hasIfc = !noIfc();
+      ['2col-wide','2col'].forEach(function(l){
+        var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
+        if(b) b.style.display = hasIfc ? 'none' : '';
+      });
       ['3col','left2','right2'].forEach(function(l){
         var b=gearLayoutBtns.querySelector('[data-layout="'+l+'"]');
-        if(b) b.style.display=noIfc()?'none':'';
+        if(b) b.style.display = hasIfc ? '' : 'none';
       });
     }
     if(btnGear) btnGear.classList.toggle('a', layout!=='2col-wide');
