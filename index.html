@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.15 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.16 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -116,12 +116,16 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 /* Portrait */
 @media (orientation:portrait){
   #vb-body{flex-direction:column!important;}
-  /* Fila superior: col1+col2 lado a lado */
+  /* Fila superior col1+col2 */
   #vb-body #portrait-top{display:flex!important;flex-direction:row;flex:1 1 0;min-height:0;overflow:hidden;}
-  #vb-body #portrait-top .vcol{flex:1 1 0;min-width:0;}
-  #vb-body #portrait-top .col-sep{flex:0 0 3px;display:flex!important;}
-  /* Separador horizontal entre top y visor */
-  #vb-body .portrait-row-sep{flex:0 0 4px;background:var(--bd);cursor:row-resize;touch-action:none;}
+  #vb-body #portrait-top>.vcol{flex:1 1 0;min-width:0;}
+  /* Separadores en portrait — grandes para touch */
+  #vb-body #portrait-top>.col-sep{flex:0 0 10px!important;display:flex!important;background:var(--bd);cursor:col-resize;}
+  #vb-body .portrait-row-sep{flex:0 0 10px;background:var(--bd);cursor:row-resize;touch-action:none;}
+  /* Col-stack en portrait (2row landscape → stack vertical) */
+  #vb-body .col-stack{flex:1 1 0;width:100%;}
+  #vb-body .col-stack>.vcol{flex:1 1 0;}
+  #vb-body .col-stack>.row-sep{flex:0 0 10px;background:var(--bd);cursor:row-resize;touch-action:none;}
   /* Visor abajo */
   #col3{flex:1 1 0;min-height:160px;}
   /* Ocultar seps de landscape */
@@ -558,7 +562,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.15</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.16</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -597,7 +601,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.15</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.16</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -630,7 +634,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.15</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.16</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -2245,11 +2249,21 @@ function togglePartColors(){
 function toggleGhost(){
   if(!xv||!xscene)return;
   vsGhost=!vsGhost;
-  xscene.setObjectsXRayed(xscene.objectIds,vsGhost);
-  xscene.setObjectsPickable(xscene.objectIds,!vsGhost);
-  if(vsGhost&&vsHl.length>0){
-    xscene.setObjectsXRayed(vsHl,false);
-    xscene.setObjectsPickable(vsHl,true);
+  if(vsGhost){
+    // Activar ghost: todo en xray excepto la selección activa
+    xscene.setObjectsXRayed(xscene.objectIds,true);
+    xscene.setObjectsPickable(xscene.objectIds,false);
+    if(vsHl.length>0){
+      xscene.setObjectsXRayed(vsHl,false);
+      xscene.setObjectsPickable(vsHl,true);
+    }
+  } else {
+    // Desactivar ghost: si hay selección activa mantenerla aislada, si no mostrar todo
+    if(vsHl.length>0){
+      isoGhost(vsHl); // mantiene selección visible, resto en xray pero sin ghost
+    } else {
+      showAll();
+    }
   }
   el('bn-ghost').classList.toggle('a',vsGhost);
 }
@@ -3008,44 +3022,55 @@ function _sbLoadPos(){
          ch.id==='portrait-top') ch.remove();
     });
 
-    // Construir: [portrait-top: col1 | sep | col2] + row-sep + col3
-    var top = document.createElement('div');
-    top.id = 'portrait-top';
+    var hasVisor = c3 && !noIfc();
 
-    var sep = document.createElement('div');
-    sep.className = 'col-sep'; sep.id = 'col-sep-portrait';
-
-    top.appendChild(c1); top.appendChild(sep); top.appendChild(c2);
-    vbody.appendChild(top);
-
-    if(c3 && !noIfc()){
-      var rs = document.createElement('div');
-      rs.className = 'portrait-row-sep'; rs.id = 'portrait-rs';
-      vbody.appendChild(rs);
-      vbody.appendChild(c3);
-      // Row resize para separador horizontal
-      makeRowDraggablePortrait(rs, top, c3);
+    if(curLayout==='2row'){
+      // Arriba/abajo: col1 encima col2, sin visor (o visor abajo si hay IFC)
+      var stack=document.createElement('div');
+      stack.className='col-stack'; stack.id='col-stack-portrait';
+      var rs1=document.createElement('div'); rs1.className='row-sep'; rs1.id='rs-p1';
+      c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
+      stack.appendChild(c1); stack.appendChild(rs1); stack.appendChild(c2);
+      vbody.appendChild(stack);
+      if(hasVisor){
+        var rsV=document.createElement('div'); rsV.className='portrait-row-sep'; rsV.id='portrait-rs';
+        vbody.appendChild(rsV); vbody.appendChild(c3);
+        c3.style.flex='1 1 0';
+        makeRowDraggablePortrait(rsV, stack, c3);
+      }
+      makeRowDraggablePortrait(rs1, c1, c2);
+    } else {
+      // Default (2col, 3col, left2, right2): col1|col2 lado a lado arriba, visor abajo
+      var top=document.createElement('div'); top.id='portrait-top';
+      var sep=document.createElement('div'); sep.className='col-sep'; sep.id='col-sep-portrait';
+      c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
+      top.appendChild(c1); top.appendChild(sep); top.appendChild(c2);
+      vbody.appendChild(top);
+      if(hasVisor){
+        var rs=document.createElement('div'); rs.className='portrait-row-sep'; rs.id='portrait-rs';
+        vbody.appendChild(rs); vbody.appendChild(c3);
+        c3.style.flex='1 1 0';
+        makeRowDraggablePortrait(rs, top, c3);
+      }
+      makeDraggablePortrait(sep, c1, c2);
     }
-
-    // Flex portrait inicial
-    c1.style.flex='1 1 0'; c2.style.flex='1 1 0';
-    if(c3) c3.style.flex='1 1 0';
-
-    // Col resize horizontal en portrait
-    makeDraggablePortrait(sep, c1, c2);
   }
 
   function makeDraggablePortrait(sep, left, right){
-    var active=false, startX=0, startW=0;
+    var active=false, startX=0, startW=0, maxW=0;
     sep.addEventListener('mousedown', on); sep.addEventListener('touchstart', onT, {passive:false});
-    function on(e){ active=true; startX=cX(e); startW=left.offsetWidth; document.body.style.userSelect='none'; e.preventDefault(); }
+    function on(e){
+      active=true; startX=cX(e);
+      startW=left.getBoundingClientRect().width;
+      var topEl=sep.closest('#portrait-top')||vbody;
+      maxW=topEl.getBoundingClientRect().width - 10/*sep*/ - 100/*min right*/;
+      document.body.style.userSelect='none'; e.preventDefault();
+    }
     function onT(e){ on({clientX:e.touches[0].clientX,preventDefault:function(){e.preventDefault();}}); }
     document.addEventListener('mousemove', mv); document.addEventListener('touchmove', mvT, {passive:false});
     function mv(e){
       if(!active)return;
-      var top=sep.closest('#portrait-top');
-      var avail=top?top.clientWidth:vbody.clientWidth;
-      var nw=Math.max(100, Math.min(startW+(cX(e)-startX), avail-100));
+      var nw=Math.max(100, Math.min(startW+(cX(e)-startX), maxW));
       left.style.flex='0 0 '+nw+'px';
     }
     function mvT(e){ if(active){ mv({clientX:e.touches[0].clientX}); e.preventDefault(); } }
