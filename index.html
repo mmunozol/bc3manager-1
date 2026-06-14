@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.22 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
+<!-- BC3 Manager v2.23 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -92,13 +92,15 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 #vb-body.no-model #col3,#vb-body.no-model .col-sep-visor{display:none!important;}
 #vb-body.ifc-hidden #col3,#vb-body.ifc-hidden .col-sep-visor{display:none!important;}
 /* Separadores redimensionables */
-.col-sep{flex:0 0 4px;background:var(--bd);cursor:col-resize;position:relative;z-index:5;touch-action:none;transition:background .12s;}
+.col-sep{flex:0 0 7px;background:var(--bd);cursor:col-resize;position:relative;z-index:5;touch-action:none;transition:background .15s;}
 .col-sep:hover,.col-sep.active{background:var(--acc);}
-.col-sep::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:20px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .12s;}
+.col-sep::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:3px;height:28px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .15s;}
 .col-sep:hover::after,.col-sep.active::after{opacity:1;}
 /* Separador horizontal */
-.row-sep{flex:0 0 4px;background:var(--bd);cursor:row-resize;touch-action:none;transition:background .12s;}
+.row-sep{flex:0 0 7px;background:var(--bd);cursor:row-resize;touch-action:none;transition:background .15s;position:relative;}
 .row-sep:hover,.row-sep.active{background:var(--acc);}
+.row-sep::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:3px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .15s;}
+.row-sep:hover::after,.row-sep.active::after{opacity:1;}
 /* Cabecera de columna */
 .col-header{display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid var(--bd);background:var(--panel2);flex-shrink:0;min-height:34px;}
 .col-header>span:first-of-type{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);white-space:nowrap;}
@@ -119,13 +121,17 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
   /* Fila con 2 columnas (top o bot) */
   #vb-body .portrait-pair{display:flex!important;flex-direction:row;flex:1 1 0;min-height:0;overflow:hidden;}
   #vb-body .portrait-pair>.vcol{flex:1 1 0;min-width:0;}
-  /* Separadores en portrait — grandes para touch */
-  #vb-body .portrait-pair>.col-sep{flex:0 0 12px!important;display:flex!important;background:var(--bd);cursor:col-resize;border-left:2px solid var(--panel2);border-right:2px solid var(--panel2);}
-  #vb-body .portrait-row-sep{flex:0 0 12px;background:var(--bd);cursor:row-resize;touch-action:none;border-top:2px solid var(--panel2);border-bottom:2px solid var(--panel2);}
+  /* Separadores en portrait — mismo estilo que landscape, tamaño táctil */
+  #vb-body .portrait-pair>.col-sep{flex:0 0 7px!important;display:flex!important;}
+  #vb-body .portrait-pair>.col-sep.active,#vb-body .portrait-pair>.col-sep:hover{background:var(--acc)!important;}
+  #vb-body .portrait-row-sep{flex:0 0 7px;background:var(--bd);cursor:row-resize;touch-action:none;position:relative;transition:background .15s;}
+  #vb-body .portrait-row-sep.active,#vb-body .portrait-row-sep:hover{background:var(--acc);}
+  #vb-body .portrait-row-sep::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:3px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .15s;}
+  #vb-body .portrait-row-sep.active::after,#vb-body .portrait-row-sep:hover::after{opacity:1;}
   /* Col-stack en portrait (2row) */
   #vb-body .col-stack{flex:1 1 0;width:100%;display:flex;flex-direction:column;}
   #vb-body .col-stack>.vcol{flex:1 1 0;}
-  #vb-body .col-stack>.row-sep{flex:0 0 12px;background:var(--bd);cursor:row-resize;touch-action:none;border-top:2px solid var(--panel2);border-bottom:2px solid var(--panel2);}
+  #vb-body .col-stack>.row-sep{flex:0 0 7px;}
   /* Visor */
   #col3{flex:1 1 0;min-height:120px;}
   /* Ocultar seps de landscape */
@@ -560,7 +566,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.22</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.23</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -599,7 +605,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.22</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.23</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -632,7 +638,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.22</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.23</span></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -3058,12 +3064,8 @@ function _sbLoadPos(){
     // Mover paneles a body temporalmente
     [c1,c2,c3].forEach(function(p){ if(p) document.body.appendChild(p); });
 
-    // Limpiar vbody
-    Array.from(vbody.children).forEach(function(ch){
-      if(ch.classList.contains('col-stack')||ch.classList.contains('col-sep')||
-         ch.classList.contains('row-sep')||ch.classList.contains('portrait-row-sep')||
-         ch.id==='portrait-top'||ch.id==='portrait-bot') ch.remove();
-    });
+    // Limpiar vbody — eliminar todo excepto col1/col2/col3 que ya están en document.body
+    Array.from(vbody.children).forEach(function(ch){ ch.remove(); });
 
     var hasVisor = c3 && !noIfc();
 
@@ -3141,7 +3143,8 @@ function _sbLoadPos(){
       active=true; startX=cX(e);
       startW=left.getBoundingClientRect().width;
       var topEl=sep.closest('.portrait-pair')||vbody;
-      maxW=topEl.getBoundingClientRect().width - 10/*sep*/ - 100/*min right*/;
+      maxW=topEl.getBoundingClientRect().width - 7 - 100;
+      sep.classList.add('active');
       document.body.style.userSelect='none'; e.preventDefault();
     }
     function onT(e){ on({clientX:e.touches[0].clientX,preventDefault:function(){e.preventDefault();}}); }
@@ -3153,14 +3156,14 @@ function _sbLoadPos(){
     }
     function mvT(e){ if(active){ mv({clientX:e.touches[0].clientX}); e.preventDefault(); } }
     document.addEventListener('mouseup', up); document.addEventListener('touchend', up, {passive:true});
-    function up(){ active=false; document.body.style.userSelect=''; }
+    function up(){ active=false; sep.classList.remove('active'); document.body.style.userSelect=''; }
     function cX(e){ return e.clientX!==undefined?e.clientX:e.pageX; }
   }
 
   function makeRowDraggablePortrait(sep, topEl, botEl){
     var active=false, startY=0, startH=0;
     sep.addEventListener('mousedown', on); sep.addEventListener('touchstart', onT, {passive:false});
-    function on(e){ active=true; startY=cY(e); startH=topEl.offsetHeight; document.body.style.userSelect='none'; e.preventDefault(); }
+    function on(e){ active=true; startY=cY(e); startH=topEl.offsetHeight; sep.classList.add('active'); document.body.style.userSelect='none'; e.preventDefault(); }
     function onT(e){ on({clientY:e.touches[0].clientY,preventDefault:function(){e.preventDefault();}}); }
     document.addEventListener('mousemove', mv); document.addEventListener('touchmove', mvT, {passive:false});
     function mv(e){
@@ -3172,7 +3175,7 @@ function _sbLoadPos(){
     }
     function mvT(e){ if(active){ mv({clientY:e.touches[0].clientY}); e.preventDefault(); } }
     document.addEventListener('mouseup', up); document.addEventListener('touchend', up, {passive:true});
-    function up(){ active=false; document.body.style.userSelect=''; }
+    function up(){ active=false; sep.classList.remove('active'); document.body.style.userSelect=''; }
     function cY(e){ return e.clientY!==undefined?e.clientY:e.pageY; }
   }
 
