@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<!-- BC3 Manager v2.26 — layout rewrite: full-width on IFC hide, portrait fix, col swap -->
 <title>BC3 Manager</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f13">
@@ -38,11 +37,6 @@ html.dark{
   --par:#fbbf24;--par-bg:#261d0a;--par-bd:#854d0e;
   --hi:#f59e0b;
 }
-/* Selección árbol en modo oscuro: fondo sólido para contraste */
-html.dark .tn.s{background:#2d4a8a;border-left-color:#60a5fa;}
-html.dark .tn.s .tl{color:#e8eaf0!important;}
-html.dark .tn:hover{background:#252836;}
-html.dark .tn:hover .tl{color:#e8eaf0;}
 
 html,body{height:100%;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;}
 button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
@@ -90,64 +84,31 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 .vbg.wn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-bd);}
 .vbg.bl{background:var(--sub-bg);color:var(--sub);border:1px solid var(--sub-bd);}
 .vbg.pu{background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;}
-/* ── Layout grid ────────────────────────────────────────────────────────── */
-#vb-body{flex:1;display:flex;overflow:hidden;background:var(--bg);}
-.vcol{display:flex;flex-direction:column;overflow:hidden;background:var(--panel);min-width:0;position:relative;flex-shrink:0;}
-/* Sin modelo IFC */
-#vb-body.no-model #col3,#vb-body.no-model .col-sep-visor{display:none!important;}
-#vb-body.ifc-hidden #col3,#vb-body.ifc-hidden .col-sep-visor{display:none!important;}
-/* Separadores redimensionables */
-.col-sep{flex:0 0 7px;background:var(--bd);cursor:col-resize;position:relative;z-index:5;touch-action:none;transition:background .15s;}
-.col-sep:hover,.col-sep.active{background:var(--acc);}
-.col-sep::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:3px;height:28px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .15s;}
-.col-sep:hover::after,.col-sep.active::after{opacity:1;}
-/* Separador horizontal */
-.row-sep{flex:0 0 7px;background:var(--bd);cursor:row-resize;touch-action:none;transition:background .15s;position:relative;}
-.row-sep:hover,.row-sep.active{background:var(--acc);}
-.row-sep::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:3px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .15s;}
-.row-sep:hover::after,.row-sep.active::after{opacity:1;}
+/* ── Layout responsive 3 columnas ── */
+#vb-body{flex:1;display:flex;overflow:hidden;position:relative;}
+.vcol{display:flex;flex-direction:column;overflow:hidden;background:var(--panel);min-width:0;position:relative;}
+.vcol.collapsed{flex:0 0 32px!important;min-width:32px!important;max-width:32px!important;}
+.vcol.collapsed .col-scroll,.vcol.collapsed .tabs,.vcol.collapsed .vtb,.vcol.collapsed .sb,.vcol.collapsed #dc,.vcol.collapsed #tv,.vcol.collapsed .vtoolbar,.vcol.collapsed #bn-showcodes{display:none!important;}
+#p3d{flex:1;position:relative;overflow:hidden;background:#f0eff8;min-height:0;}
+.vcol.collapsed .col-header{display:flex;align-items:center;gap:6px;padding:6px 8px;border-bottom:1px solid var(--bd);background:var(--panel);flex-shrink:0;min-height:36px;overflow:visible;flex-wrap:wrap;}
+.vcol.collapsed .col-header{writing-mode:vertical-rl;text-orientation:mixed;justify-content:center;padding:12px 4px;flex-wrap:nowrap;}
+.vcol.collapsed .col-meta{display:none;}
+#col1{flex:0 0 300px;border-right:1px solid var(--bd);}
+#col2{flex:0 0 240px;border-right:1px solid var(--bd);}
+#col3{flex:1;background:#f0eff8;display:flex;flex-direction:column;position:relative;}
 /* Cabecera de columna */
 .col-header{display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid var(--bd);background:var(--panel2);flex-shrink:0;min-height:34px;}
 .col-header>span:first-of-type{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);white-space:nowrap;}
 .col-meta{flex:1;font-size:10px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-/* Scroll interno */
-.col-scroll{flex:1;overflow-y:auto;}
-/* Sub-stack para layouts con filas */
-.col-stack{display:flex;flex-direction:column;overflow:hidden;flex:1;min-width:0;}
-/* Minimizar */
-.vcol.col-min .col-scroll,.vcol.col-min .tabs,.vcol.col-min .vtb,
-.vcol.col-min .sb,.vcol.col-min #dc,.vcol.col-min #tv,
-.vcol.col-min .vtoolbar,.vcol.col-min #bn-showcodes{display:none!important;}
-.vcol.col-min{flex:0 0 32px!important;min-width:32px!important;}
-.vcol.col-min .col-header{writing-mode:vertical-rl;justify-content:center;padding:10px 4px;}
-/* Portrait */
-@media (orientation:portrait){
-  #vb-body{flex-direction:column!important;}
-  /* Fila con 2 columnas (top o bot) */
-  #vb-body .portrait-pair{display:flex!important;flex-direction:row;flex:1 1 0;min-height:0;overflow:hidden;}
-  #vb-body .portrait-pair>.vcol{flex:1 1 0;min-width:0;}
-  /* Separadores en portrait — mismo estilo que landscape, tamaño táctil */
-  #vb-body .portrait-pair>.col-sep{flex:0 0 7px!important;display:flex!important;}
-  #vb-body .portrait-pair>.col-sep.active,#vb-body .portrait-pair>.col-sep:hover{background:var(--acc)!important;}
-  #vb-body .portrait-row-sep{flex:0 0 7px;background:var(--bd);cursor:row-resize;touch-action:none;position:relative;transition:background .15s;}
-  #vb-body .portrait-row-sep.active,#vb-body .portrait-row-sep:hover{background:var(--acc);}
-  #vb-body .portrait-row-sep::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:3px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .15s;}
-  #vb-body .portrait-row-sep.active::after,#vb-body .portrait-row-sep:hover::after{opacity:1;}
-  /* Col-stack en portrait (2row) */
-  #vb-body .col-stack{flex:1 1 0;width:100%;display:flex;flex-direction:column;}
-  #vb-body .col-stack>.vcol{flex:1 1 0;}
-  #vb-body .col-stack>.row-sep{flex:0 0 7px;}
-  /* Visor */
-  #col3{flex:1 1 0;min-height:120px;}
-  /* Ocultar seps de landscape */
-  #vb-body>.col-sep{display:none!important;}
-}
-@media (pointer:coarse){
-  .btn,.t3,.tab{min-height:38px;min-width:38px;}
-  .tn{min-height:36px;}
-}
-.vpanel.minimized .col-scroll,.vpanel.minimized .tabs,.vpanel.minimized .vtb,.vpanel.minimized .sb,.vpanel.minimized #dc,.vpanel.minimized #tv,.vpanel.minimized .vtoolbar,.vpanel.minimized #bn-showcodes{display:none!important;}
-#p3d{flex:1;position:relative;overflow:hidden;background:#f0eff8;min-height:0;}
+.col-tog{border:none;background:none;cursor:pointer;color:var(--muted);font-size:16px;padding:6px 8px;min-width:32px;min-height:32px;display:flex;align-items:center;justify-content:center;border-radius:4px;}
+.col-tog:hover{background:var(--bd);color:var(--text);}
+.col-tog.a{background:var(--acc-bg);color:var(--acc);}
+.col-tog-r{margin-right:auto;}
+/* Divisores arrastrables */
+.col-div{flex:0 0 8px;background:var(--bd);cursor:col-resize;position:relative;z-index:10;touch-action:none;}
+.col-div:hover,.col-div.dragging{background:var(--acc);}
+.col-div::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:3px;height:24px;border-radius:2px;background:var(--acc);opacity:0;transition:opacity .15s;}
+.col-div:hover::after,.col-div.dragging::after{opacity:1;}
 /* Scroll interno */
 .col-scroll{flex:1;overflow-y:auto;}
 /* Panel 3D ocupa todo col3 */
@@ -178,6 +139,7 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 @keyframes blink3{0%,100%{opacity:1}50%{opacity:.3}}
 /* Type panel */
 #tp{position:absolute;top:50px;right:48px;background:rgba(255,255,255,.93);border-radius:7px;padding:8px 10px;min-width:90px;z-index:20;border:1px solid var(--bd);box-shadow:0 2px 6px rgba(0,0,0,.1);}
+
 /* Stats bar */
 .sb{display:none;padding:4px 10px;border-bottom:1px solid var(--bd);background:var(--panel2);gap:10px;flex-shrink:0;align-items:center;}
 .st{font-size:10px;color:var(--muted);}
@@ -207,6 +169,29 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 .tab:hover{color:var(--text);}
 .tab.a{color:var(--acc);border-bottom-color:var(--acc);}
 #dc{flex:1;overflow-y:auto;padding:10px 10px;}
+/* Responsive: portrait → visor debajo */
+@media (orientation:portrait),(max-width:700px){
+  /* Fila superior: presupuesto + detalle lado a lado · Fila inferior: visor a todo el ancho */
+  #vb-body{flex-direction:row;flex-wrap:wrap;}
+  .col-div{display:none;}
+  #col1,#col2{flex:1 1 0;min-width:0;height:44%;max-height:none;border-bottom:1px solid var(--bd);}
+  #col1{border-right:1px solid var(--bd);}
+  #col2{border-right:none;}
+  #col3{flex:1 1 100%;width:100%;height:56%;min-height:0;}
+  /* Columna superior colapsada → barra vertical estrecha, la otra ocupa el ancho */
+  #col1.collapsed,#col2.collapsed{flex:0 0 32px!important;min-width:32px!important;max-width:32px!important;height:44%;max-height:none!important;}
+  /* Visor colapsado → barra horizontal, columnas toman toda la altura */
+  #col3.collapsed{flex:1 1 100%!important;height:36px!important;min-height:36px!important;max-height:36px!important;min-width:0!important;max-width:none!important;}
+  #col3.collapsed .col-header{writing-mode:horizontal-tb;padding:4px 10px;}
+  #vb-body:has(#col3.collapsed) #col1,
+  #vb-body:has(#col3.collapsed) #col2{height:calc(100% - 36px);}
+  /* Ambas columnas colapsadas → barras horizontales arriba, visor casi a pantalla completa */
+  #vb-body:has(#col1.collapsed):has(#col2.collapsed) #col1,
+  #vb-body:has(#col1.collapsed):has(#col2.collapsed) #col2{height:36px;flex:1 1 0!important;min-width:0!important;max-width:none!important;}
+  #vb-body:has(#col1.collapsed):has(#col2.collapsed) #col1 .col-header,
+  #vb-body:has(#col1.collapsed):has(#col2.collapsed) #col2 .col-header{writing-mode:horizontal-tb;padding:4px 10px;}
+  #vb-body:has(#col1.collapsed):has(#col2.collapsed) #col3{height:calc(100% - 36px);}
+}
 /* Header/status del visor */
 #sm-wrap{display:flex;align-items:center;gap:4px;flex:1;justify-content:flex-end;}
 .cg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
@@ -225,19 +210,6 @@ button,input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;}
 .cs{display:flex;gap:12px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;margin-bottom:12px;}
 .css .n{font-size:16px;font-weight:600;display:block;}
 .mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center;}
-/* Layout picker buttons */
-.lp-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 8px;border:2px solid var(--bd);border-radius:7px;background:var(--panel2);cursor:pointer;transition:all .12s;}
-.lp-btn:hover{border-color:var(--acc);background:var(--acc-bg);}
-.lp-btn.active{border-color:var(--acc);background:var(--acc-bg);box-shadow:0 0 0 2px var(--acc);}
-/* Gear panel sections */
-.gear-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin-bottom:8px;}
-.gear-file-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--bd);border-radius:7px;cursor:pointer;background:var(--panel2);transition:border-color .12s;}
-.gear-file-row:hover{border-color:var(--acc);}
-.gear-file-icon{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-/* Slot selector */
-.slot-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--panel2);}
-.slot-label{font-size:10px;color:var(--muted2);font-weight:600;text-transform:uppercase;letter-spacing:.05em;width:30px;flex-shrink:0;}
-.slot-select{flex:1;border:none;background:transparent;font-size:11px;color:var(--text);cursor:pointer;outline:none;}
 .mb.o{display:flex;}
 .md{background:var(--panel);border-radius:12px;padding:22px;width:420px;max-width:95vw;border:1px solid var(--bd);}
 .md h3{font-size:15px;font-weight:600;margin-bottom:14px;}
@@ -372,7 +344,7 @@ button,input,select,textarea{-webkit-appearance:none;}
 
 /* Touch targets mínimos */
 @media (pointer:coarse){
-  .btn,.t3,.tab{min-height:38px;min-width:38px;}
+  .btn,.t3,.col-tog,.tab{min-height:38px;min-width:38px;}
   .tn{min-height:36px;}
   .col-div{flex:0 0 8px;}
 }
@@ -571,7 +543,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.26</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.30</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -610,7 +582,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- PROYECTO -->
 <div class="view" id="v-proj">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.26</span></div>
+    <div class="logo">BC3 <em>Manager</em></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bh2" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -643,7 +615,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- VISOR -->
 <div class="view" id="v-visor">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span style="font-size:9px;color:var(--muted);font-weight:400;margin-left:2px;">v2.26</span></div>
+    <div class="logo">BC3 <em>Manager</em></div>
     <span style="color:var(--bd2);font-size:16px;">|</span>
     <button class="btn" id="bp3" style="display:inline-flex;align-items:center;gap:5px;font-weight:500;">
       <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -657,23 +629,24 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
       <input type="file" id="fmeta" style="position:absolute;left:-9999px;" accept=".json">
       <input type="file" id="fbc3r" style="position:absolute;left:-9999px;" accept=".bc3,.BC3">
       <button class="btn" id="bn-search" style="display:inline-flex;align-items:center;gap:5px;" title="Buscar partida"><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Buscar</button>
-      <button class="btn p" id="bn-ifc" style="display:inline-flex;align-items:center;gap:5px;" title="Modelo 3D"><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>3D</button>
+      <button class="btn" id="bn-archivos" style="display:inline-flex;align-items:center;gap:5px;" title="Gestión de archivos"><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Archivos</button>
       <span class="sd" id="sd"></span>
       <span id="sm" style="font-size:11px;color:var(--muted);">—</span>
-      <button class="btn" id="bn-gear" title="Opciones" style="display:flex;align-items:center;justify-content:center;padding:0;width:32px;height:32px;margin-left:2px;">
-        <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <button class="btn" id="bn-dark-v" title="Cambiar tema" style="display:flex;align-items:center;justify-content:center;padding:0;width:32px;height:32px;margin-left:2px;">
+        <svg id="icon-dark-v" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="icon-light-v" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
     </div>
   </div>
   <!-- 3 columnas -->
-  <div id="vb-body" class="no-model">
+  <div id="vb-body">
     <!-- COL 1: Árbol BC3 -->
-    <div class="vcol" id="col1" style="flex:0 0 300px;">
+    <div class="vcol" id="col1">
       <div class="col-header">
-        
         <span>Presupuesto</span>
         <div class="col-meta"><span id="bt">—</span></div>
         <button class="btn" id="bn-showcodes" title="Mostrar/ocultar códigos" style="font-size:11px;font-family:var(--mono);padding:0 8px;min-width:28px;min-height:28px;line-height:1;display:flex;align-items:center;justify-content:center;">#</button>
+        <button class="col-tog" id="tog-col1" title="Colapsar">‹</button>
       </div>
       <div class="sb" id="stb">
         <div class="st"><b id="sc">0</b> cap.</div>
@@ -690,12 +663,13 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
         <button id="ms-clr" class="btn" style="font-size:13px;padding:0;width:32px;display:flex;align-items:center;justify-content:center;" title="Limpiar selección">✕</button>
       </div>
     </div>
-    <div class="col-sep" id="col-sep12"></div>
-    <div class="vcol" id="col2" style="flex:0 0 280px;">
+    <div class="col-div" id="div12" data-cols="col1,col2"></div>
+    <!-- COL 2: Detalle -->
+    <div class="vcol" id="col2">
       <div class="col-header">
-        
         <span>Detalle</span>
         <div class="col-meta" id="dt" style="display:none;"></div>
+        <button class="col-tog" id="tog-col2" title="Colapsar">‹</button>
       </div>
       <div class="tabs">
         <div class="tab a" data-t="bim" title="BIM — vínculos y modelo 3D"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
@@ -705,9 +679,9 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
       </div>
       <div id="dc" class="col-scroll"><div class="ed"><p>Selecciona una partida</p></div></div>
     </div>
-    <div class="col-sep" id="col-sep23"></div>
+    <div class="col-div" id="div23" data-cols="col2,col3"></div>
     <!-- COL 3: Visor 3D -->
-    <div class="vcol" id="col3" style="flex:1 1 0;">
+    <div class="vcol" id="col3">
       <div class="col-header">
         <span>Modelo 3D</span>
         <div class="vtoolbar" style="display:flex;gap:3px;align-items:center;flex:1;justify-content:flex-end;padding-right:4px;flex-wrap:wrap;">
@@ -720,6 +694,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
           <button class="t3" id="bn-cats" title="Categorías" style="padding:7px;"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></button>
           <button class="t3" id="bn-views" title="Vistas guardadas" style="padding:7px;"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h2l2-3h6l2 3h2a1 1 0 011 1v11a1 1 0 01-1 1H5a1 1 0 01-1-1V8a1 1 0 011-1z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
         </div>
+        <button class="col-tog" id="tog-col3" title="Colapsar">‹</button>
       </div>
       <div id="p3d">
         <div id="dz">
@@ -792,177 +767,30 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 </div>
 
 <!-- ══ MODAL ARCHIVOS ════════════════════════════════════════════════════ -->
-<!-- ══ LAYOUT PICKER ════════════════════════════════════════════════════ -->
-<!-- ══ PANEL OPCIONES (gear) ════════════════════════════════════════════ -->
-<div id="gear-panel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(340px,92vw);max-height:85vh;z-index:400;background:var(--panel);border:1px solid var(--bd);border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.22);flex-direction:column;overflow:hidden;">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--bd);background:var(--panel2);flex-shrink:0;">
-    <span style="font-size:12px;font-weight:700;color:var(--text);">Opciones</span>
-    <button id="bn-gear-close" style="border:none;background:none;cursor:pointer;color:var(--muted);font-size:18px;padding:2px 6px;border-radius:4px;line-height:1;">✕</button>
-  </div>
-  <div style="flex:1;overflow-y:auto;padding:14px;">
-
-    <!-- SECCIÓN: LAYOUT -->
-    <div class="gear-section">
-      <div class="gear-section-title">Distribución</div>
-      <!-- Selector de layout -->
-      <div style="margin-bottom:10px;">
-        <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Plantilla</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="gear-layout-btns">
-          <!-- Landscape sin visor -->
-          <button class="lp-btn lp-ls" data-layout="2col" title="Izquierda · Derecha">
-            <svg viewBox="0 0 40 26" width="40" height="26"><rect x="1" y="1" width="17" height="24" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="22" y="1" width="17" height="24" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <button class="lp-btn lp-ls" data-layout="2row" title="Arriba · Abajo">
-            <svg viewBox="0 0 40 26" width="40" height="26"><rect x="1" y="1" width="38" height="10" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="15" width="38" height="10" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <!-- Portrait sin visor -->
-          <button class="lp-btn lp-pt" data-layout="2col" title="Columnas">
-            <svg viewBox="0 0 26 40" width="26" height="40"><rect x="1" y="1" width="10" height="38" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="15" y="1" width="10" height="38" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <button class="lp-btn lp-pt" data-layout="2row" title="Filas">
-            <svg viewBox="0 0 26 40" width="26" height="40"><rect x="1" y="1" width="24" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="22" width="24" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <!-- Portrait con visor -->
-          <button class="lp-btn lp-pt3" data-layout="p-top" title="2 columnas arriba · Visor abajo">
-            <svg viewBox="0 0 26 40" width="26" height="40"><rect x="1" y="1" width="10" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="15" y="1" width="10" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="22" width="24" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <button class="lp-btn lp-pt3" data-layout="p-bot" title="Visor arriba · 2 columnas abajo">
-            <svg viewBox="0 0 26 40" width="26" height="40"><rect x="1" y="1" width="24" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="22" width="10" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="15" y="22" width="10" height="17" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <button class="lp-btn lp-ls3" data-layout="3col" title="3 columnas">
-            <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="22" y="1" width="16" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="42" y="1" width="17" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <button class="lp-btn lp-ls3" data-layout="left2" title="2 filas izq · Visor der">
-            <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="24" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="1" y="15" width="24" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="1" width="30" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-          <button class="lp-btn lp-ls3" data-layout="right2" title="Izq · 2 filas der">
-            <svg viewBox="0 0 60 28" width="60" height="28"><rect x="1" y="1" width="24" height="26" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="1" width="30" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/><rect x="29" y="15" width="30" height="12" rx="2" fill="var(--panel2)" stroke="var(--bd)" stroke-width="1.5"/></svg>
-          </button>
-        </div>
-      </div>
-      <!-- Asignación de contenido por slot -->
-      <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Contenido por hueco</div>
-      <div id="gear-slots" style="display:flex;flex-direction:column;gap:6px;"></div>
-    </div>
-
-    <div style="height:1px;background:var(--bd);margin:14px 0;"></div>
-
-    <!-- SECCIÓN: APARIENCIA -->
-    <div class="gear-section">
-      <div class="gear-section-title">Apariencia</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
-        <span style="font-size:12px;">Modo oscuro</span>
-        <button id="gear-dark-toggle" style="display:flex;align-items:center;gap:6px;border:1px solid var(--bd);background:var(--panel2);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:11px;color:var(--text);">
-          <svg id="gear-icon-dark" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg id="gear-icon-light" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          <span id="gear-dark-label">Oscuro</span>
-        </button>
-      </div>
-    </div>
-
-    <div style="height:1px;background:var(--bd);margin:14px 0;"></div>
-
-    <!-- SECCIÓN: ARCHIVOS -->
-    <div class="gear-section">
-      <div class="gear-section-title">Archivos</div>
-      <div style="display:flex;flex-direction:column;gap:6px;">
-        <!-- XKT -->
-        <label for="fxkt" class="gear-file-row" id="gear-row-xkt">
-          <span class="gear-file-icon" style="background:var(--acc-bg);">
-            <svg viewBox="0 0 24 24" width="14" height="14" stroke="var(--acc)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-          </span>
-          <div style="flex:1;">
-            <div style="font-size:11px;font-weight:600;">Modelo XKT</div>
-            <div id="gear-sub-xkt" style="font-size:10px;color:var(--muted);">Geometría 3D del BIM</div>
-          </div>
-          <span id="gear-check-xkt" style="display:none;color:var(--ok);font-size:14px;">✓</span>
-          <svg viewBox="0 0 24 24" width="12" height="12" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </label>
-        <!-- JSON -->
-        <label for="fmeta" class="gear-file-row" id="gear-row-meta" style="opacity:0.5;pointer-events:none;">
-          <span class="gear-file-icon" style="background:var(--ok-bg);">
-            <svg viewBox="0 0 24 24" width="14" height="14" stroke="var(--ok)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </span>
-          <div style="flex:1;">
-            <div style="font-size:11px;font-weight:600;">Metadatos JSON</div>
-            <div id="gear-sub-meta" style="font-size:10px;color:var(--muted);">Categorías IFC</div>
-          </div>
-          <span id="gear-check-meta" style="display:none;color:var(--ok);font-size:14px;">✓</span>
-          <svg viewBox="0 0 24 24" width="12" height="12" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </label>
-        <!-- BC3 reimport -->
-        <label for="fbc3r" class="gear-file-row">
-          <span class="gear-file-icon" style="background:var(--warn-bg);">
-            <svg viewBox="0 0 24 24" width="14" height="14" stroke="var(--warn)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
-          </span>
-          <div style="flex:1;">
-            <div style="font-size:11px;font-weight:600;">Reimportar BC3</div>
-            <div style="font-size:10px;color:var(--muted);">Actualizar presupuesto</div>
-          </div>
-          <svg viewBox="0 0 24 24" width="12" height="12" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </label>
-        <!-- Export -->
-        <button id="bn-export" class="gear-file-row" style="text-align:left;width:100%;">
-          <span class="gear-file-icon" style="background:#f5f3ff;">
-            <svg viewBox="0 0 24 24" width="14" height="14" stroke="#7c3aed" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          </span>
-          <div style="flex:1;">
-            <div style="font-size:11px;font-weight:600;">Exportar .bc3m</div>
-            <div style="font-size:10px;color:var(--muted);">Guardar copia de seguridad</div>
-          </div>
-          <svg viewBox="0 0 24 24" width="12" height="12" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        </button>
-      </div>
-    </div>
-
-  </div>
-</div>
-<!-- Overlay gear panel -->
-<div id="gear-overlay" style="display:none;position:fixed;inset:0;z-index:399;"></div>
-
-<!-- ══ MODAL IFC ═══════════════════════════════════════════════════════════ -->
-<div class="mb" id="m-ifc">
-  <div class="md" style="width:400px;">
-    <h3 style="display:flex;align-items:center;gap:8px;">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-      Modelo IFC
-    </h3>
+<div class="mb" id="m-archivos">
+  <div class="md" style="width:380px;">
+    <h3 style="display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Gestión de archivos</h3>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
-      <!-- Paso 1: XKT -->
-      <label for="fxkt" id="ifc-row-xkt" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;cursor:pointer;background:var(--panel2);transition:all .12s;" onmouseover="this.style.borderColor='var(--acc)'" onmouseout="this.style.borderColor='var(--bd)'">
-        <span id="ifc-icon-xkt" style="width:32px;height:32px;border-radius:6px;background:var(--acc-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <label for="fxkt" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;cursor:pointer;background:var(--panel2);transition:all .12s;" onmouseover="this.style.borderColor='var(--acc)'" onmouseout="this.style.borderColor='var(--bd)'">
+        <span style="width:32px;height:32px;border-radius:6px;background:var(--acc-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <svg viewBox="0 0 24 24" width="15" height="15" stroke="var(--acc)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
         </span>
         <div style="flex:1;">
-          <div style="font-size:12px;font-weight:600;">1 · Cargar modelo XKT</div>
-          <div id="ifc-sub-xkt" style="font-size:10px;color:var(--muted);margin-top:1px;">Geometría 3D del modelo BIM</div>
+          <div style="font-size:12px;font-weight:600;">Cargar modelo XKT</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:1px;">Modelo 3D en formato XKT para el visor</div>
         </div>
-        <svg id="ifc-arr-xkt" viewBox="0 0 24 24" width="13" height="13" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <svg viewBox="0 0 24 24" width="13" height="13" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </label>
-      <!-- Paso 2: JSON (deshabilitado hasta que se suba XKT) -->
-      <label for="fmeta" id="ifc-row-meta" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--panel2);transition:all .12s;opacity:0.45;pointer-events:none;">
-        <span id="ifc-icon-meta" style="width:32px;height:32px;border-radius:6px;background:var(--ok-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg viewBox="0 0 24 24" width="15" height="15" stroke="var(--ok)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      <label for="fmeta" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;cursor:pointer;background:var(--panel2);transition:all .12s;" onmouseover="this.style.borderColor='var(--acc)'" onmouseout="this.style.borderColor='var(--bd)'">
+        <span style="width:32px;height:32px;border-radius:6px;background:var(--ok-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 24 24" width="15" height="15" stroke="var(--ok)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         </span>
         <div style="flex:1;">
-          <div style="font-size:12px;font-weight:600;">2 · Cargar metadatos JSON</div>
-          <div id="ifc-sub-meta" style="font-size:10px;color:var(--muted);margin-top:1px;">Categorías IFC para filtrado por tipo</div>
+          <div style="font-size:12px;font-weight:600;">Cargar metadatos JSON</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:1px;">Categorías IFC para filtrado por tipo</div>
         </div>
-        <svg id="ifc-arr-meta" viewBox="0 0 24 24" width="13" height="13" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <svg viewBox="0 0 24 24" width="13" height="13" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </label>
-    </div>
-    <div class="ma"><button class="btn" id="bn-can-ifc">Cerrar</button></div>
-  </div>
-</div>
-
-<!-- ══ MODAL BACKUP ════════════════════════════════════════════════════════ -->
-<div class="mb" id="m-backup">
-  <div class="md" style="width:380px;">
-    <h3 style="display:flex;align-items:center;gap:8px;">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Copia de seguridad
-    </h3>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
       <label for="fbc3r" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;cursor:pointer;background:var(--panel2);transition:all .12s;" onmouseover="this.style.borderColor='var(--acc)'" onmouseout="this.style.borderColor='var(--bd)'">
         <span style="width:32px;height:32px;border-radius:6px;background:var(--warn-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <svg viewBox="0 0 24 24" width="15" height="15" stroke="var(--warn)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
@@ -984,7 +812,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="var(--muted2)" fill="none" stroke-width="2"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </button>
     </div>
-    <div class="ma"><button class="btn" id="bn-can-backup">Cerrar</button></div>
+    <div class="ma"><button class="btn" id="bn-can-archivos">Cerrar</button></div>
   </div>
 </div>
 
@@ -1272,27 +1100,17 @@ function openVer(vid){
         renderTree();
       }
     });
-    // Cargar XKT si existe — ocultar/mostrar visor según disponibilidad
-    var vbBody=el('vb-body');
-    // Resetear toggle IFC al entrar
-    if(vbBody)vbBody.classList.remove('ifc-hidden');
+    // Cargar XKT si existe
     if(v.hasXkt){
-      if(vbBody)vbBody.classList.remove('no-model');
       dbG('ifcbin',vid,function(rec){
         if(rec&&rec.xkt){
+          // Restaurar _metaJson para que funcionen los filtros
           if(rec.meta) _metaJson = rec.meta;
           initXeokit().then(function(){loadXkt(rec.xkt, rec.meta||null);});
-        } else {
-          if(vbBody)vbBody.classList.add('no-model');
         }
-        if(typeof syncIfcBtn==='function')syncIfcBtn();
       });
-    } else {
-      if(vbBody)vbBody.classList.add('no-model');
-      if(typeof syncIfcBtn==='function')syncIfcBtn();
     }
     showV('visor');
-    setTimeout(function(){ if(window._layout)window._layout.apply(); },30);
   });
 }
 
@@ -1300,7 +1118,10 @@ function openVer(vid){
 function parseBC3(txt){
   var BC={c:{},h:{},d:{},m:{},g:{},t:{}};
   var asmRE=/^([A-Z]{2,5}-\d{3,4}(?:\.\d+)?)(?:\s|$)/;
-  var ifc22RE=/[\s\-]([0-9A-Za-z_$]{22})$/;
+  // GUID IFC de 22 caracteres al final del comentario, en dos formatos:
+  //  - antiguo:  "...descripción - 4xY...Z"   (tras guion o espacio)
+  //  - nuevo:    "...descripción [4xY...Z]"    (entre corchetes)
+  var ifc22RE=/(?:\[([0-9A-Za-z_$]{22})\]|[\s\-]([0-9A-Za-z_$]{22}))\s*$/;
   var raw=txt.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   var regs=[],cur='';
   raw.split('\n').forEach(function(l){if(l.charAt(0)==='~'){if(cur)regs.push(cur);cur=l;}else cur+='\n'+l;});
@@ -1382,8 +1203,11 @@ function pM(BC,s,asmRE,ifc22RE){
     if(txt||nd||L||A){
       BC.m[code].push({txt:txt,nd:nd,a:L,b:A,h:H,parc:parc});
       var m22=ifc22RE.exec(txt);
-      if(m22){var esp=txt.slice(0,txt.lastIndexOf(m22[0])).replace(/[\s\-]+$/,'').trim();
-        BC.g[code].push({ifc22:m22[1],esp:esp,type:'ifc22'});}
+      if(m22){
+        var guid=m22[1]||m22[2];
+        // Texto descriptivo: quitar el GUID final (con sus corchetes/guion) y limpiar
+        var esp=txt.slice(0,txt.lastIndexOf(m22[0])).replace(/[\s\-\[\]]+$/,'').trim();
+        BC.g[code].push({ifc22:guid,esp:esp,type:'ifc22'});}
       var masm=asmRE.exec(txt);
       if(masm)BC.g[code].push({asmCode:masm[1],esp:txt.slice(masm[0].length).trim(),type:'asm'});
     }
@@ -1525,15 +1349,7 @@ function renderTree(){
     // Click
     row.addEventListener('click',function(e){
       e.stopPropagation();
-      if(hk){
-        var opening = !cw.classList.contains('o');
-        cw.classList.toggle('o'); tog.classList.toggle('o');
-        if(!opening){
-          // Cerrar todos los descendientes al cerrar el padre
-          cw.querySelectorAll('.tc').forEach(function(tc){ tc.classList.remove('o'); });
-          cw.querySelectorAll('.tg').forEach(function(tg){ tg.classList.remove('o'); });
-        }
-      }
+      if(hk){cw.classList.toggle('o');tog.classList.toggle('o');}
       // Select partida
       document.querySelectorAll('.tn').forEach(function(n){n.classList.remove('s');});
       row.classList.add('s');
@@ -1924,10 +1740,7 @@ async function initXeokit(){
         var node=document.querySelector('.tn[data-code="'+fp+'"]');
         if(node){
           node.classList.add('s');
-          // Scroll centrado para asegurar visibilidad
-          setTimeout(function(){
-            node.scrollIntoView({block:'center',behavior:'smooth'});
-          },50);
+          node.scrollIntoView({block:'nearest',behavior:'smooth'});
           var par=node.parentElement;
           while(par){
             if(par.classList&&par.classList.contains('tc')&&!par.classList.contains('o')){
@@ -2041,11 +1854,11 @@ async function loadXkt(xktBuffer, metaJson){
       objectDefaults: {
         'IfcSpace':          { visible: false, opacity: 0 },
         // Ventanas → semitransparentes
-        'IfcWindow':         { opacity: 0.7 },
+        'IfcWindow':         { opacity: 0.4 },
         // Barandillas y pasamanos
         'IfcRailing':        { opacity: 0.7 },
         // Placas (a veces usadas como vidrios)
-        'IfcPlate':          { opacity: 0.6 },
+        'IfcPlate':          { opacity: 0.3 },
         // Aperturas → invisible
         'IfcOpeningElement': { visible: false }
       }
@@ -2283,34 +2096,12 @@ function togglePartColors(){
 
 function toggleGhost(){
   if(!xv||!xscene)return;
-  var isoBtn=el('bn-iso');
-  var isoActive=isoBtn&&isoBtn.classList.contains('a');
-
-  if(isoActive && vsHl.length>0){
-    // Con aislamiento: alternar entre "solo selección sólida" y "selección + resto en xray"
-    vsGhost=!vsGhost;
-    if(vsGhost){
-      // Resto en xray, selección sólida (estado por defecto al aislar)
-      isoGhost(vsHl);
-    } else {
-      // Todo visible y sólido, selección sigue visible
-      xscene.setObjectsXRayed(xscene.objectIds,false);
-      xscene.setObjectsVisible(xscene.objectIds,true);
-      xscene.setObjectsPickable(xscene.objectIds,true);
-    }
-  } else {
-    // Sin aislamiento: ghost global
-    vsGhost=!vsGhost;
-    if(vsGhost){
-      xscene.setObjectsXRayed(xscene.objectIds,true);
-      xscene.setObjectsPickable(xscene.objectIds,false);
-      if(vsHl.length>0){
-        xscene.setObjectsXRayed(vsHl,false);
-        xscene.setObjectsPickable(vsHl,true);
-      }
-    } else {
-      showAll();
-    }
+  vsGhost=!vsGhost;
+  xscene.setObjectsXRayed(xscene.objectIds,vsGhost);
+  xscene.setObjectsPickable(xscene.objectIds,!vsGhost);
+  if(vsGhost&&vsHl.length>0){
+    xscene.setObjectsXRayed(vsHl,false);
+    xscene.setObjectsPickable(vsHl,true);
   }
   el('bn-ghost').classList.toggle('a',vsGhost);
 }
@@ -2455,11 +2246,6 @@ async function loadXktFile(xktFile, metaFile){
   });
   dbP('ifcbin',{vid:curVR,xkt:xktUint,meta:metaJson,name:xktFile.name,savedAt:Date.now()});
   pg3(30);
-  // Mostrar visor
-  var vbBody=el('vb-body');
-  if(vbBody){vbBody.classList.remove('no-model');vbBody.classList.remove('ifc-hidden');}
-  if(typeof syncIfcBtn==='function')syncIfcBtn();
-  if(window._layout)window._layout.apply('3col');
   await initXeokit();
   loadXkt(xktUint,metaJson);
 }
@@ -2528,7 +2314,7 @@ async function applyMetaFile(file){
 
       // Apply objectDefaults
       var OBJ_DEFAULTS={
-        'IfcWindow':0.7,'IfcPlate':0.6,
+        'IfcWindow':0.4,'IfcPlate':0.3,
         'IfcRailing':0.7,'IfcOpeningElement':0
       };
       (metaJson.metaObjects||metaJson.objects||[]).forEach(function(o){
@@ -2873,577 +2659,179 @@ function _sbLoadPos(){
 }
 
 
-
-
-
-// ── LAYOUT + GEAR SYSTEM ──────────────────────────────────────────────────
+// ── COLUMNAS REDIMENSIONABLES + TOUCH ────────────────────────────────────
 (function(){
-  var vbody = document.getElementById('vb-body');
-  if(!vbody) return;
 
-  // ── Definiciones ──────────────────────────────────────────────────────────
-  var PANELS = {
-    presupuesto: 'col1',
-    detalle:     'col2',
-    visor:       'col3'
-  };
-  var PANEL_NAMES = { col1:'Presupuesto', col2:'Detalle', col3:'Visor 3D' };
-  var MIN = 160;
+  var body = document.getElementById('vb-body');
+  if(!body) return;
 
-  // Layouts: array de slots. Cada slot: { id, flex, stack? }
-  // slot.stack = array de 2 sub-slots apilados verticalmente
-  var LAYOUTS = {
-    '2col':  { slots:['A','B'], ncols:2 },
-    '2row':  { slots:[{stack:['A','B']}], ncols:1 },
-    '3col':  { slots:['A','B','C'], ncols:3 },
-    'left2': { slots:[{stack:['A','B']},'C'], ncols:2 },
-    'right2':{ slots:['A',{stack:['B','C']}], ncols:2 },
-    'p-top': { slots:['A','B','C'], ncols:3, portraitOnly:true },
-    'p-bot': { slots:['A','B','C'], ncols:3, portraitOnly:true }
-  };
+  // Estado de columnas: 'open' | 'collapsed'
+  var colState = {col1:'open', col2:'open', col3:'open'};
+  var colSizes = {col1:260, col2:220}; // col3 ocupa el resto
 
-  var slotAssign = { A:'col1', B:'col2', C:'col3' };
-  var curLayout  = '2col';
-  var colW = [300, 260];
+  function applyLayout(){
+    var col1=document.getElementById('col1');
+    var col2=document.getElementById('col2');
+    var col3=document.getElementById('col3');
+    var d12=document.getElementById('div12');
+    var d23=document.getElementById('div23');
+    if(!col1||!col2||!col3) return;
 
-  function isPortrait(){
-    // Usar solo orientación — iPads tienen >700px de ancho en portrait
-    return window.matchMedia('(orientation:portrait)').matches;
-  }
-  function noIfc(){
-    return vbody.classList.contains('no-model')||vbody.classList.contains('ifc-hidden');
-  }
+    var totalW = body.clientWidth;
+    var divW = 5;
 
-  // ── Aplicar layout ────────────────────────────────────────────────────────
-  function applyLayout(layout){
-    if(layout) curLayout = layout;
-    var portrait = isPortrait();
-    var hasVisor = !noIfc();
+    var c1open = colState.col1==='open';
+    var c2open = colState.col2==='open';
+    var c3open = colState.col3==='open';
 
-    // Sin IFC: forzar layout 2 paneles
-    if(!hasVisor && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
-      curLayout='2col';
-    }
-    // Sin IFC en portrait: forzar 2 paneles
-    if(!hasVisor && (curLayout==='p-top'||curLayout==='p-bot')){
-      curLayout='2col';
-    }
-    // En portrait: forzar layout compatible (landscape-only → 2col)
-    if(portrait && (curLayout==='3col'||curLayout==='left2'||curLayout==='right2')){
-      curLayout='2col';
-    }
-    // En portrait con IFC: si el layout es 2col/2row, auto-promover a p-top
-    if(portrait && hasVisor && (curLayout==='2col'||curLayout==='2row')){
-      curLayout='p-top';
-    }
+    var used = (c1open?0:32) + (c2open?0:32) + (c3open?0:32);
+    var openCols = (c1open?1:0)+(c2open?1:0)+(c3open?1:0);
+    var divCount = 2;
+    var available = totalW - used - divCount*divW;
 
-    if(!portrait) buildDOM();
-    else buildPortrait();
-    markActive(curLayout);
-    buildSlotUI();
-    notifyXeokit();
-  }
-
-  // ── Construir DOM flex ────────────────────────────────────────────────────
-  function buildDOM(){
-    var W = vbody.clientWidth;
-    if(W<10) return;
-    var L = LAYOUTS[curLayout];
-    if(!L) return;
-
-    // Mover paneles a document.body temporalmente (fuera de stacks)
-    // visibility hidden para evitar flash
-    ['col1','col2','col3'].forEach(function(id){
-      var p=document.getElementById(id);
-      if(p){ p.style.visibility='hidden'; document.body.appendChild(p); }
-    });
-
-    // Limpiar stacks y seps de vbody
-    Array.from(vbody.children).forEach(function(child){
-      if(child.classList.contains('col-stack')||
-         child.classList.contains('col-sep')||
-         child.classList.contains('row-sep'))
-        child.remove();
-    });
-
-    // Reconstruir orden en vbody
-    L.slots.forEach(function(slot, idx){
-      if(idx>0){
-        var sep=document.createElement('div');
-        sep.className='col-sep'; sep.id='col-sep-'+idx;
-        vbody.appendChild(sep);
-      }
-      if(typeof slot==='string'){
-        var panel=document.getElementById(slotAssign[slot]||'col1');
-        if(panel) vbody.appendChild(panel);
-      } else if(slot.stack){
-        var stack=document.createElement('div');
-        stack.className='col-stack'; stack.id='col-stack-'+idx;
-        vbody.appendChild(stack);
-        slot.stack.forEach(function(s,si){
-          if(si>0){
-            var rs=document.createElement('div');
-            rs.className='row-sep'; rs.id='row-sep-'+idx+'-'+si;
-            stack.appendChild(rs);
-          }
-          var panel=document.getElementById(slotAssign[s]||'col1');
-          if(panel) stack.appendChild(panel);
-        });
-      }
-    });
-
-    applyFlex(W);
-    initSeps();
-
-    // col3 SIEMPRE en vbody (CSS no-model/ifc-hidden lo oculta)
-    var col3 = document.getElementById('col3');
-    if(col3){
-      // Quitar clase visor de todos los seps existentes
-      vbody.querySelectorAll('.col-sep-visor').forEach(function(s){ s.classList.remove('col-sep-visor'); });
-      // Si col3 no está ya en un stack dentro de vbody, añadirlo al final
-      if(col3.parentNode !== vbody && !col3.closest('#vb-body .col-stack')){
-        // Añadir separador antes de col3
-        var sepV = document.createElement('div');
-        sepV.className = 'col-sep col-sep-visor'; sepV.id = 'col-sep-v';
-        vbody.appendChild(sepV);
-        vbody.appendChild(col3);
-        initSeps(); // reinicializar seps incluyendo el nuevo
-      } else {
-        // Marcar el sep inmediatamente anterior a col3
-        var prev = col3.previousElementSibling;
-        if(prev && prev.classList.contains('col-sep')) prev.classList.add('col-sep-visor');
-      }
-    }
-
-    // Restaurar visibilidad
-    ['col1','col2','col3'].forEach(function(id){
-      var p=document.getElementById(id); if(p) p.style.visibility='';
-    });
-  }
-
-  function applyFlex(W){
-    var L = LAYOUTS[curLayout];
-    if(!L) return;
-    var seps = vbody.querySelectorAll('.col-sep').length;
-    var avail = W - seps*4;
-
-    if(curLayout==='2col'){
-      var w1=Math.max(MIN, Math.min(colW[0], avail-MIN));
-      flexEl(slotAssign['A'], '0 0 '+w1+'px');
-      flexEl(slotAssign['B'], '1 1 0');
-    } else if(curLayout==='2row'){
-      // Stack vertical: ambos paneles flex:1, sin separadores col
-      flexEl(slotAssign['A'], '1 1 0');
-      flexEl(slotAssign['B'], '1 1 0');
-    } else if(curLayout==='3col'){
-      var w1=Math.max(MIN,Math.min(colW[0],avail*0.32));
-      var w2=Math.max(MIN,Math.min(colW[1],avail*0.28));
-      flexEl(slotAssign['A'], '0 0 '+w1+'px');
-      flexEl(slotAssign['B'], '0 0 '+w2+'px');
-      flexEl(slotAssign['C'], '1 1 0');
-      hideVisor(false);
-    } else if(curLayout==='left2'){
-      // stack izq, col der
-      var stackEl=vbody.querySelector('.col-stack');
-      var colRight=document.getElementById(slotAssign['C']);
-      var w=Math.max(MIN,Math.min(colW[0],avail*0.4));
-      if(stackEl) stackEl.style.flex='0 0 '+w+'px';
-      if(colRight) colRight.style.flex='1 1 0';
-      flexEl(slotAssign['A'],'1 1 0'); flexEl(slotAssign['B'],'1 1 0');
-      hideVisor(false);
-    } else if(curLayout==='right2'){
-      var colLeft=document.getElementById(slotAssign['A']);
-      var stackEl=vbody.querySelector('.col-stack');
-      var w=Math.max(MIN,Math.min(colW[0],avail*0.38));
-      if(colLeft) colLeft.style.flex='0 0 '+w+'px';
-      if(stackEl) stackEl.style.flex='1 1 0';
-      flexEl(slotAssign['B'],'1 1 0'); flexEl(slotAssign['C'],'1 1 0');
-      hideVisor(false);
-    }
-  }
-
-  function flexEl(id, val){
-    var el=document.getElementById(id); if(el) el.style.flex=val;
-  }
-  function hideVisor(hide){
-    // En 2 col sin IFC el visor puede no existir visualmente
-    var col3=document.getElementById(slotAssign['C']||'col3');
-    // No ocultar col3 desde aquí — lo controla no-model/ifc-hidden
-  }
-
-  function buildPortrait(){
-    var c1=document.getElementById('col1');
-    var c2=document.getElementById('col2');
-    var c3=document.getElementById('col3');
-    if(!c1||!c2) return;
-
-    // Mover paneles a body temporalmente
-    [c1,c2,c3].forEach(function(p){ if(p) document.body.appendChild(p); });
-
-    // Limpiar vbody — eliminar todo excepto col1/col2/col3 que ya están en document.body
-    Array.from(vbody.children).forEach(function(ch){ ch.remove(); });
-
-    var hasVisor = c3 && !noIfc();
-
-    // Helpers
-    function makeTop(){ var d=document.createElement('div'); d.id='portrait-top'; d.className='portrait-pair'; return d; }
-    function makeBot(){ var d=document.createElement('div'); d.id='portrait-bot'; d.className='portrait-pair'; return d; }
-    function makeSep(cls,id){ var d=document.createElement('div'); d.className=cls; d.id=id; return d; }
-    // Obtener panel por slot usando slotAssign
-    function panelA(){ return document.getElementById(slotAssign['A']); }
-    function panelB(){ return document.getElementById(slotAssign['B']); }
-    function panelC(){ return document.getElementById(slotAssign['C']); }
-
-    if(curLayout==='2row'){
-      // col A sobre col B, sin visor
-      var pA=panelA(), pB=panelB();
-      var stack=document.createElement('div'); stack.className='col-stack'; stack.id='col-stack-portrait';
-      var rs1=makeSep('row-sep','rs-p1');
-      pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
-      stack.appendChild(pA); stack.appendChild(rs1); stack.appendChild(pB);
-      vbody.appendChild(stack);
-      makeRowDraggablePortrait(rs1, pA, pB);
-
-    } else if((curLayout==='p-bot') && hasVisor){
-      // Slot C arriba (visor), A+B abajo en columnas
-      var pA=panelA(), pB=panelB(), pC=panelC();
-      pC.style.flex='1 1 0';
-      vbody.appendChild(pC);
-      var rsV=makeSep('portrait-row-sep','portrait-rs');
-      vbody.appendChild(rsV);
-      var bot=makeBot();
-      var sep=makeSep('col-sep','col-sep-portrait');
-      pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
-      bot.appendChild(pA); bot.appendChild(sep); bot.appendChild(pB);
-      vbody.appendChild(bot);
-      makeRowDraggablePortrait(rsV, pC, bot);
-      makeDraggablePortrait(sep, pA, pB);
-
-    } else if((curLayout==='p-top') && hasVisor){
-      // Slots A+B arriba en columnas, C abajo (visor)
-      var pA=panelA(), pB=panelB(), pC=panelC();
-      var top=makeTop();
-      var sep=makeSep('col-sep','col-sep-portrait');
-      pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
-      top.appendChild(pA); top.appendChild(sep); top.appendChild(pB);
-      vbody.appendChild(top);
-      var rs=makeSep('portrait-row-sep','portrait-rs');
-      pC.style.flex='1 1 0';
-      vbody.appendChild(rs); vbody.appendChild(pC);
-      makeRowDraggablePortrait(rs, top, pC);
-      makeDraggablePortrait(sep, pA, pB);
-
+    if(c1open&&c2open&&c3open){
+      // Tutti aperti - usa colSizes
+      var w1=Math.min(colSizes.col1, available*0.45);
+      var w2=Math.min(colSizes.col2, available*0.35);
+      var w3=Math.max(200, available-w1-w2);
+      col1.style.flex='0 0 '+w1+'px';
+      col2.style.flex='0 0 '+w2+'px';
+      col3.style.flex='1 1 auto';
+    } else if(c1open&&!c2open&&c3open){
+      col1.style.flex='0 0 '+Math.min(colSizes.col1,available*0.4)+'px';
+      col2.style.flex='0 0 32px';
+      col3.style.flex='1 1 auto';
+    } else if(!c1open&&c2open&&c3open){
+      col1.style.flex='0 0 32px';
+      col2.style.flex='0 0 '+Math.min(colSizes.col2,available*0.4)+'px';
+      col3.style.flex='1 1 auto';
+    } else if(c1open&&c2open&&!c3open){
+      col1.style.flex='0 0 '+Math.min(colSizes.col1,available*0.5)+'px';
+      col2.style.flex='1 1 auto';
+      col3.style.flex='0 0 32px';
+    } else if(c1open&&!c2open&&!c3open){
+      col1.style.flex='1 1 auto';
+      col2.style.flex='0 0 32px';
+      col3.style.flex='0 0 32px';
+    } else if(!c1open&&c2open&&!c3open){
+      col1.style.flex='0 0 32px';
+      col2.style.flex='1 1 auto';
+      col3.style.flex='0 0 32px';
+    } else if(!c1open&&!c2open&&c3open){
+      col1.style.flex='0 0 32px';
+      col2.style.flex='0 0 32px';
+      col3.style.flex='1 1 auto';
     } else {
-      // Default 2col / p-top: A+B lado a lado, C abajo si hay visor
-      var pA=panelA(), pB=panelB();
-      var top=makeTop();
-      var sep=makeSep('col-sep','col-sep-portrait');
-      pA.style.flex='1 1 0'; pB.style.flex='1 1 0';
-      top.appendChild(pA); top.appendChild(sep); top.appendChild(pB);
-      vbody.appendChild(top);
-      if(hasVisor){
-        var pC=panelC();
-        var rs=makeSep('portrait-row-sep','portrait-rs');
-        pC.style.flex='1 1 0';
-        vbody.appendChild(rs); vbody.appendChild(pC);
-        makeRowDraggablePortrait(rs, top, pC);
+      // Todos colapsados - expandir col3
+      col1.style.flex='0 0 32px';
+      col2.style.flex='0 0 32px';
+      col3.style.flex='1 1 auto';
+      colState.col3='open';
+    }
+
+    // Collapsed state
+    [col1,col2,col3].forEach(function(col){
+      var id=col.id;
+      var isOpen=colState[id]==='open';
+      col.classList.toggle('collapsed',!isOpen);
+      var btn=col.querySelector('.col-tog');
+      if(btn){
+        // col3 está a la derecha: flecha apunta izquierda cuando abierta, derecha cuando colapsada
+        // col1/col2 están a la izquierda: flecha apunta derecha cuando abierta, izquierda cuando colapsada — no, al revés
+        // col1: abierta → ‹ cierra hacia izq. Colapsada → › abre hacia der. ✓
+        // col3: abierta → › cierra hacia der. Colapsada → ‹ abre hacia izq.
+        if(id==='col3') btn.textContent=isOpen?'›':'‹';
+        else btn.textContent=isOpen?'‹':'›';
       }
-      makeDraggablePortrait(sep, pA, pB);
-    }
-  }
-
-  function makeDraggablePortrait(sep, left, right){
-    var active=false, startX=0, startW=0, maxW=0;
-    sep.addEventListener('mousedown', on); sep.addEventListener('touchstart', onT, {passive:false});
-    function on(e){
-      active=true; startX=cX(e);
-      startW=left.getBoundingClientRect().width;
-      var topEl=sep.closest('.portrait-pair')||vbody;
-      maxW=topEl.getBoundingClientRect().width - 7 - 100;
-      sep.classList.add('active');
-      document.body.style.userSelect='none'; e.preventDefault();
-    }
-    function onT(e){ on({clientX:e.touches[0].clientX,preventDefault:function(){e.preventDefault();}}); }
-    document.addEventListener('mousemove', mv); document.addEventListener('touchmove', mvT, {passive:false});
-    function mv(e){
-      if(!active)return;
-      var nw=Math.max(100, Math.min(startW+(cX(e)-startX), maxW));
-      left.style.flex='0 0 '+nw+'px';
-    }
-    function mvT(e){ if(active){ mv({clientX:e.touches[0].clientX}); e.preventDefault(); } }
-    document.addEventListener('mouseup', up); document.addEventListener('touchend', up, {passive:true});
-    function up(){ active=false; sep.classList.remove('active'); document.body.style.userSelect=''; }
-    function cX(e){ return e.clientX!==undefined?e.clientX:e.pageX; }
-  }
-
-  function makeRowDraggablePortrait(sep, topEl, botEl){
-    var active=false, startY=0, startH=0;
-    sep.addEventListener('mousedown', on); sep.addEventListener('touchstart', onT, {passive:false});
-    function on(e){ active=true; startY=cY(e); startH=topEl.offsetHeight; sep.classList.add('active'); document.body.style.userSelect='none'; e.preventDefault(); }
-    function onT(e){ on({clientY:e.touches[0].clientY,preventDefault:function(){e.preventDefault();}}); }
-    document.addEventListener('mousemove', mv); document.addEventListener('touchmove', mvT, {passive:false});
-    function mv(e){
-      if(!active)return;
-      var total=vbody.clientHeight;
-      var nh=Math.max(120, Math.min(startH+(cY(e)-startY), total-120));
-      topEl.style.flex='0 0 '+nh+'px';
-      if(botEl) botEl.style.flex='1 1 0';
-    }
-    function mvT(e){ if(active){ mv({clientY:e.touches[0].clientY}); e.preventDefault(); } }
-    document.addEventListener('mouseup', up); document.addEventListener('touchend', up, {passive:true});
-    function up(){ active=false; sep.classList.remove('active'); document.body.style.userSelect=''; }
-    function cY(e){ return e.clientY!==undefined?e.clientY:e.pageY; }
-  }
-
-  // ── Separadores redimensionables ──────────────────────────────────────────
-  function initSeps(){
-    // Col seps (horizontal)
-    vbody.querySelectorAll('.col-sep').forEach(function(sep, idx){
-      makeDraggable(sep, 'col', idx);
     });
-    // Row seps (vertical)
-    vbody.querySelectorAll('.row-sep').forEach(function(sep){
-      makeRowDraggable(sep);
-    });
-  }
 
-  function makeDraggable(sep, axis, idx){
-    var active=false, startX=0, startW=0, leftEl=null, maxW=0;
-    sep.addEventListener('mousedown', on); sep.addEventListener('touchstart', onT, {passive:false});
-    function on(e){
-      leftEl = sep.previousElementSibling;
-      if(!leftEl) return;
-      active  = true;
-      startX  = cX(e);
-      startW  = leftEl.getBoundingClientRect().width;
-      // Calcular maxW UNA sola vez al inicio (sin reflow en move)
-      var totalW   = vbody.getBoundingClientRect().width;
-      var sepCount = vbody.querySelectorAll('.col-sep').length;
-      maxW = totalW - sepCount*4 - MIN;
-      sep.classList.add('active');
-      document.body.style.cursor='col-resize';
-      document.body.style.userSelect='none';
-      e.preventDefault();
+    // Notify xeokit of resize
+    if(window.xv && window.xv.scene) {
+      setTimeout(function(){
+        try{window.xv.scene.canvas.resolutionScale=window.xv.scene.canvas.resolutionScale;}catch(e){}
+      },100);
     }
-    function onT(e){ on({clientX:e.touches[0].clientX,preventDefault:function(){e.preventDefault();}}); }
-    document.addEventListener('mousemove', mv); document.addEventListener('touchmove', mvT, {passive:false});
-    function mv(e){
-      if(!active||!leftEl) return;
-      var delta = cX(e) - startX;
-      var nw    = Math.max(MIN, Math.min(startW + delta, maxW));
-      leftEl.style.flex = '0 0 '+nw+'px';
-      if(idx===0) colW[0]=nw; else colW[1]=nw;
-      notifyXeokit();
-    }
-    function mvT(e){ if(active){ mv({clientX:e.touches[0].clientX}); e.preventDefault(); } }
-    document.addEventListener('mouseup', up); document.addEventListener('touchend', up, {passive:true});
-    function up(){ if(!active)return; active=false; sep.classList.remove('active'); document.body.style.cursor=''; document.body.style.userSelect=''; }
-    function cX(e){ return e.clientX!==undefined ? e.clientX : e.pageX; }
   }
 
-  function makeRowDraggable(sep){
-    var active=false, startY=0, startH=0, topEl=null;
-    sep.addEventListener('mousedown', on); sep.addEventListener('touchstart', onT, {passive:false});
-    function on(e){
-      active=true; startY=e.clientY; sep.classList.add('active');
-      topEl=sep.previousElementSibling;
-      startH=topEl?topEl.offsetHeight:0;
-      document.body.style.cursor='row-resize'; document.body.style.userSelect='none'; e.preventDefault();
-    }
-    function onT(e){ on({clientY:e.touches[0].clientY,preventDefault:function(){e.preventDefault();}}); }
-    document.addEventListener('mousemove', mv); document.addEventListener('touchmove', mvT, {passive:false});
-    function mv(e){
-      if(!active||!topEl)return;
-      var stack=sep.closest('.col-stack');
-      var avail=stack?stack.clientHeight:vbody.clientHeight;
-      var nh=Math.max(MIN, Math.min(startH+(e.clientY-startY), avail-MIN));
-      topEl.style.flex='0 0 '+nh+'px';
-      notifyXeokit();
-    }
-    function mvT(e){ if(active){ mv({clientY:e.touches[0].clientY}); e.preventDefault(); } }
-    document.addEventListener('mouseup', up); document.addEventListener('touchend', up, {passive:true});
-    function up(){ if(!active)return; active=false; sep.classList.remove('active'); document.body.style.cursor=''; document.body.style.userSelect=''; }
-  }
-
-  // ── Gear panel ────────────────────────────────────────────────────────────
-  var gearPanel   = document.getElementById('gear-panel');
-  var gearOverlay = document.getElementById('gear-overlay');
-  var btnGear     = document.getElementById('bn-gear');
-  var btnClose    = document.getElementById('bn-gear-close');
-
-  function openGear(){
-    if(!gearPanel) return;
-    gearPanel.style.display='flex';
-    gearOverlay.style.display='block';
-    syncGearDark();
-    buildSlotUI();
-    markActive(curLayout);
-  }
-  function closeGear(){
-    if(gearPanel) gearPanel.style.display='none';
-    if(gearOverlay) gearOverlay.style.display='none';
-  }
-
-  if(btnGear)    btnGear.addEventListener('click', function(e){ e.stopPropagation(); gearPanel.style.display==='none'?openGear():closeGear(); });
-  if(btnClose)   btnClose.addEventListener('click', closeGear);
-  if(gearOverlay) gearOverlay.addEventListener('click', closeGear);
-
-  // Layout buttons inside gear
-  var gearLayoutBtns = document.getElementById('gear-layout-btns');
-  if(gearLayoutBtns) gearLayoutBtns.querySelectorAll('.lp-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      applyLayout(btn.dataset.layout);
-    });
-  });
-
-  function markActive(layout){
-    if(gearLayoutBtns) gearLayoutBtns.querySelectorAll('.lp-btn').forEach(function(b){
-      var isActive = b.dataset.layout===layout;
-      b.classList.toggle('active', isActive);
-      b.querySelectorAll('svg rect').forEach(function(r){
-        r.setAttribute('fill', isActive ? 'var(--acc-bg)' : 'var(--panel2)');
-        r.setAttribute('stroke', isActive ? 'var(--acc)' : 'var(--bd)');
-      });
-    });
-    if(gearLayoutBtns){
-      var portrait = isPortrait();
-      var hasIfc   = !noIfc();
-      // 4 casos:
-      // Landscape sin IFC  → lp-ls (2col,2row landscape)
-      // Landscape con IFC  → 3col, left2, right2
-      // Portrait sin IFC   → lp-pt (2col,2row portrait)
-      // Portrait con IFC   → lp-pt (2col,2row portrait) + lp-pt3 (p-top,p-bot)
-      gearLayoutBtns.querySelectorAll('.lp-ls').forEach(function(b){
-        b.style.display = (!portrait && !hasIfc) ? '' : 'none';
-      });
-      gearLayoutBtns.querySelectorAll('.lp-pt').forEach(function(b){
-        b.style.display = (portrait && !hasIfc) ? '' : 'none';
-      });
-      gearLayoutBtns.querySelectorAll('.lp-pt3').forEach(function(b){
-        b.style.display = (portrait && hasIfc) ? '' : 'none';
-      });
-      gearLayoutBtns.querySelectorAll('.lp-ls3').forEach(function(b){
-        b.style.display = (!portrait && hasIfc) ? '' : 'none';
-      });
-      // Eliminar los selectores viejos por data-layout para 3col etc
-      ['3col','left2','right2'].forEach(function(l){
-        // ya manejados por lp-ls3, no hacer nada adicional
-      });
-    }
-    if(btnGear) btnGear.classList.toggle('a', layout!=='2col');
-  }
-
-  // ── Slot UI — asignar contenido a cada hueco ─────────────────────────────
-  var SLOT_OPTIONS = [
-    {value:'col1', label:'Presupuesto'},
-    {value:'col2', label:'Detalle'},
-    {value:'col3', label:'Visor 3D'}
-  ];
-  var SLOT_KEYS_MAP = {
-    '2col':  ['A','B'],
-    '2row':  ['A','B'],
-    '3col':  ['A','B','C'],
-    'left2': ['A','B','C'],
-    'right2':['A','B','C'],
-    'p-top': ['A','B','C'],
-    'p-bot': ['A','B','C']
-  };
-
-  function buildSlotUI(){
-    var container = document.getElementById('gear-slots');
-    if(!container) return;
-    var keys = SLOT_KEYS_MAP[curLayout]||['A','B'];
-    container.innerHTML='';
-    keys.forEach(function(key){
-      var row = document.createElement('div');
-      row.className='slot-row';
-      var lbl = document.createElement('span');
-      lbl.className='slot-label'; lbl.textContent=key;
-      var sel = document.createElement('select');
-      sel.className='slot-select';
-      SLOT_OPTIONS.forEach(function(opt){
-        if(noIfc() && opt.value==='col3') return; // hide visor if no IFC
-        var o=document.createElement('option');
-        o.value=opt.value; o.textContent=opt.label;
-        if(slotAssign[key]===opt.value) o.selected=true;
-        sel.appendChild(o);
-      });
-      sel.addEventListener('change', function(){
-        var prev=slotAssign[key];
-        var next=sel.value;
-        // Swap si el nuevo ya está asignado a otro slot
-        keys.forEach(function(k){ if(k!==key && slotAssign[k]===next) slotAssign[k]=prev; });
-        slotAssign[key]=next;
-        applyLayout();
-      });
-      row.appendChild(lbl); row.appendChild(sel);
-      container.appendChild(row);
-    });
-  }
-
-  // ── Tema oscuro ───────────────────────────────────────────────────────────
-  var darkToggle = document.getElementById('gear-dark-toggle');
-  if(darkToggle) darkToggle.addEventListener('click', function(){
-    if(window.applyDark) window.applyDark(!window._dark);
-    syncGearDark();
-  });
-  function syncGearDark(){
-    var d=window._dark;
-    var iconD=document.getElementById('gear-icon-dark');
-    var iconL=document.getElementById('gear-icon-light');
-    var lbl=document.getElementById('gear-dark-label');
-    if(iconD) iconD.style.display=d?'none':'';
-    if(iconL) iconL.style.display=d?'':'none';
-    if(lbl)   lbl.textContent=d?'Claro':'Oscuro';
-  }
-
-  // ── Archivos en gear ──────────────────────────────────────────────────────
-  // bn-export ya tiene handler, redirigimos closeGear tras exportar
-  var bnExp=document.getElementById('bn-export');
-  if(bnExp) bnExp.addEventListener('click', function(){ if(curVR){exportVersion(curVR);} });
-
-  // ── Sincronizar iconos XKT/meta en gear cuando se carga ──────────────────
-  window.gearSetXktDone=function(name){
-    var sub=document.getElementById('gear-sub-xkt');
-    var chk=document.getElementById('gear-check-xkt');
-    var row=document.getElementById('gear-row-meta');
-    if(sub) sub.textContent=name||'Cargado ✓';
-    if(chk) chk.style.display='';
-    if(row){ row.style.opacity='1'; row.style.pointerEvents='auto'; }
-  };
-  window.gearSetMetaDone=function(name){
-    var sub=document.getElementById('gear-sub-meta');
-    var chk=document.getElementById('gear-check-meta');
-    if(sub) sub.textContent=name||'Cargado ✓';
-    if(chk) chk.style.display='';
-  };
-
-  // ── Toggle códigos árbol ──────────────────────────────────────────────────
+  // Toggle códigos en árbol
   on('bn-showcodes','click',function(e){
     e.stopPropagation();
     if(!curBC)return;
     curBC._showCodes=!curBC._showCodes;
-    el('bn-showcodes').classList.toggle('a',!!curBC._showCodes);
+    el('bn-showcodes').classList.toggle('a', !!curBC._showCodes);
     renderTree();
   });
 
-  function notifyXeokit(){
-    if(window.xv&&window.xv.scene) setTimeout(function(){
-      try{window.xv.scene.canvas.resolutionScale=window.xv.scene.canvas.resolutionScale;}catch(e){}
-    },100);
-  }
+  // Toggle buttons
+  document.querySelectorAll('.col-tog').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var col=btn.closest('.vcol');
+      if(!col) return;
+      var id=col.id;
+      colState[id] = colState[id]==='open'?'collapsed':'open';
+      applyLayout();
+    });
+  });
 
-  window.addEventListener('resize', function(){ applyLayout(); });
-  window.addEventListener('orientationchange', function(){ setTimeout(applyLayout,300); });
+  // ── Resize dividers — mouse ──────────────────────────────────────────
+  document.querySelectorAll('.col-div').forEach(function(div){
+    var cols=(div.dataset.cols||'').split(',');
+    if(cols.length<2) return;
+    var dragging=false, startX=0, sw=0;
 
-  window._layout = {
-    apply: applyLayout,
-    current: function(){ return curLayout; },
-    syncGearXkt: function(n){ if(window.gearSetXktDone) window.gearSetXktDone(n); },
-    syncGearMeta: function(n){ if(window.gearSetMetaDone) window.gearSetMetaDone(n); }
-  };
+    div.addEventListener('mousedown',function(e){
+      if(colState[cols[0]]==='collapsed'||colState[cols[1]]==='collapsed') return;
+      dragging=true; startX=e.clientX;
+      var c1=document.getElementById(cols[0]);
+      sw=c1?c1.offsetWidth:260;
+      document.body.style.cursor='col-resize';
+      document.body.style.userSelect='none';
+      e.preventDefault();
+    });
 
-  setTimeout(applyLayout, 40);
+    document.addEventListener('mousemove',function(e){
+      if(!dragging) return;
+      var delta=e.clientX-startX;
+      var nw=Math.max(160, sw+delta);
+      if(cols[0]==='col1') colSizes.col1=nw;
+      if(cols[0]==='col2') colSizes.col2=nw;
+      applyLayout();
+    });
+
+    document.addEventListener('mouseup',function(){
+      if(dragging){dragging=false;document.body.style.cursor='';document.body.style.userSelect='';}
+    });
+
+    // ── Touch resize ──────────────────────────────────────────────────
+    var touchStartX=0, touchSW=0;
+    div.addEventListener('touchstart',function(e){
+      if(colState[cols[0]]==='collapsed'||colState[cols[1]]==='collapsed') return;
+      touchStartX=e.touches[0].clientX;
+      var c1=document.getElementById(cols[0]);
+      touchSW=c1?c1.offsetWidth:260;
+      e.preventDefault();
+    },{passive:false});
+
+    div.addEventListener('touchmove',function(e){
+      var delta=e.touches[0].clientX-touchStartX;
+      var nw=Math.max(160, touchSW+delta);
+      if(cols[0]==='col1') colSizes.col1=nw;
+      if(cols[0]==='col2') colSizes.col2=nw;
+      applyLayout();
+      e.preventDefault();
+    },{passive:false});
+  });
+
+  // ── Orientation change / resize ────────────────────────────────────
+  window.addEventListener('resize', function(){applyLayout();});
+  window.addEventListener('orientationchange',function(){
+    setTimeout(applyLayout, 300);
+  });
+
+  // Initial layout
+  applyLayout();
+
 })();
 
 // ── EVENTOS ───────────────────────────────────────────────────────────────
@@ -3528,19 +2916,13 @@ on('bn-okv','click',function(){
 // Visor — XKT upload
 on('fxkt','change',function(){
   if(!this.files[0]||!curVR){this.value='';return;}
-  var fname=this.files[0].name;
   loadXktFile(this.files[0], null);
   this.value='';
-  // Marcar en gear panel
-  if(window._layout) window._layout.syncGearXkt(fname);
 });
 on('fmeta','change',function(){
   if(!this.files[0]||!curVR){this.value='';return;}
-  var fname=this.files[0].name;
   applyMetaFile(this.files[0]);
   this.value='';
-  // Marcar en gear panel
-  if(window._layout) window._layout.syncGearMeta(fname);
 });
 
 // Visor — BC3 reimport
@@ -3556,8 +2938,7 @@ on('fbc3r','change',function(){
     dbP('bc3data',{vid:curVR,bc3:bc3});
     dbG('versions',curVR,function(v){if(v){v.nPartidas=nP;v.nBimLinked=nB;dbP('versions',v);}});
     renderTree();
-    hideM('m-backup');
-    st3('BC3 reimportado: '+Object.keys(bc3.c).length+' conceptos','ok');
+    alert('BC3 reimportado: '+Object.keys(bc3.c).length+' conceptos');
   };
   rd.readAsText(f,'latin1');this.value='';
 });
@@ -3571,13 +2952,9 @@ on('bn-iso','click',function(){
   if(this.classList.contains('a')){
     showAll();
     this.classList.remove('a');
-    vsGhost=false;
-    el('bn-ghost').classList.remove('a');
   } else if(vsHl.length>0){
     isoGhost(vsHl);
     this.classList.add('a');
-    vsGhost=true;
-    el('bn-ghost').classList.add('a');
   } else {
     st3('Selecciona primero una partida o un elemento','sp');
   }
@@ -3705,7 +3082,9 @@ function buildViewsPanel(){
     list.appendChild(row);
   });
 }
-// bn-export handled inside gear panel JS
+on('bn-export','click',function(){if(curVR){exportVersion(curVR);hideM('m-archivos');}});
+on('bn-dark-p','click',function(){window.applyDark(!window._dark);});
+on('bn-dark-v','click',function(){window.applyDark(!window._dark);});
 
 // Import .bc3m
 on('fimport-home','change',function(){if(this.files[0])importBc3m(this.files[0]);this.value='';});
@@ -3719,89 +3098,12 @@ document.querySelectorAll('.tab').forEach(function(t){
 });
 
 // Búsqueda árbol
-// Sincroniza el aspecto del botón IFC según estado actual
-function syncIfcBtn(){
-  var btn=el('bn-ifc');
-  if(!btn)return;
-  var body=el('vb-body');
-  var noModel=body&&body.classList.contains('no-model');
-  if(noModel){
-    // Sin modelo: botón abre modal, aspecto neutro
-    btn.classList.remove('a');
-    btn.title='Cargar modelo 3D';
-  } else {
-    // Con modelo: botón es toggle — activo cuando el visor está visible
-    var hidden=body&&body.classList.contains('ifc-hidden');
-    btn.classList.toggle('a',!hidden);
-    btn.title=hidden?'Mostrar 3D':'Ocultar 3D';
-  }
-}
-
-on('bn-ifc','click',function(){
-  var body=el('vb-body');
-  var noModel=body&&body.classList.contains('no-model');
-  if(noModel){
-    // Sin modelo → abrir gear panel en sección archivos
-    if(window.gearSetXktDone||true){ var gp=document.getElementById('gear-panel'); var go=document.getElementById('gear-overlay'); if(gp){gp.style.display='flex';if(go)go.style.display='block';} }
-  } else {
-    // Con modelo → toggle visibilidad col3
-    body.classList.toggle('ifc-hidden');
-    syncIfcBtn();
-    if(window._layout)window._layout.apply();
-  }
+on('bn-archivos','click',function(){showM('m-archivos');});
+on('bn-can-archivos','click',function(){hideM('m-archivos');});
+// Close archivos modal when a file input is triggered
+['fxkt','fmeta','fbc3r'].forEach(function(id){
+  on(id,'change',function(){hideM('m-archivos');});
 });
-on('bn-can-ifc','click',function(){hideM('m-ifc');});
-on('bn-vbackup','click',function(){showM('m-backup');});
-on('bn-can-backup','click',function(){hideM('m-backup');});
-
-// Función para actualizar el estado visual del modal IFC
-function ifcModalSetXktDone(name){
-  var icon=el('ifc-icon-xkt'), sub=el('ifc-sub-xkt'), arr=el('ifc-arr-xkt');
-  var row=el('ifc-row-xkt');
-  if(icon)icon.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" stroke="var(--ok)" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-  if(icon)icon.style.background='var(--ok-bg)';
-  if(sub)sub.textContent=name||'Cargado ✓';
-  if(arr)arr.style.display='none';
-  if(row){row.style.cursor='default';row.onmouseover=null;row.onmouseout=null;row.style.borderColor='var(--ok-bd)';}
-  // Habilitar paso 2
-  var rowMeta=el('ifc-row-meta');
-  if(rowMeta){rowMeta.style.opacity='1';rowMeta.style.pointerEvents='auto';rowMeta.style.cursor='pointer';
-    rowMeta.onmouseover=function(){this.style.borderColor='var(--acc)';};
-    rowMeta.onmouseout=function(){this.style.borderColor='var(--bd)';};
-  }
-}
-function ifcModalSetMetaDone(name){
-  var icon=el('ifc-icon-meta'), sub=el('ifc-sub-meta'), arr=el('ifc-arr-meta');
-  var row=el('ifc-row-meta');
-  if(icon)icon.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" stroke="var(--ok)" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-  if(icon)icon.style.background='var(--ok-bg)';
-  if(sub)sub.textContent=name||'Cargado ✓';
-  if(arr)arr.style.display='none';
-  if(row){row.style.cursor='default';row.onmouseover=null;row.onmouseout=null;row.style.borderColor='var(--ok-bd)';}
-}
-function ifcModalRefresh(){
-  // Restaurar estado según datos actuales de la versión
-  if(!curVR)return;
-  dbG('versions',curVR,function(v){
-    if(v&&v.hasXkt) ifcModalSetXktDone(v.ifcName||'Modelo cargado');
-    else {
-      // Resetear XKT a estado inicial
-      var icon=el('ifc-icon-xkt'),sub=el('ifc-sub-xkt'),arr=el('ifc-arr-xkt'),row=el('ifc-row-xkt');
-      if(icon){icon.style.background='var(--acc-bg)';icon.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" stroke="var(--acc)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>';}
-      if(sub)sub.textContent='Geometría 3D del modelo BIM';
-      if(arr)arr.style.display='';
-      if(row){row.style.borderColor='';row.onmouseover=function(){this.style.borderColor='var(--acc)';};row.onmouseout=function(){this.style.borderColor='var(--bd)';};}
-      var rowMeta=el('ifc-row-meta');
-      if(rowMeta){rowMeta.style.opacity='0.45';rowMeta.style.pointerEvents='none';rowMeta.style.cursor='';}
-    }
-  });
-  // Resetear estado meta visualmente (se marcará done si se carga)
-  var iconM=el('ifc-icon-meta'),subM=el('ifc-sub-meta'),arrM=el('ifc-arr-meta'),rowM=el('ifc-row-meta');
-  if(iconM){iconM.style.background='var(--ok-bg)';iconM.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" stroke="var(--ok)" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>';}
-  if(subM)subM.textContent='Categorías IFC para filtrado por tipo';
-  if(arrM)arrM.style.display='';
-  if(rowM)rowM.style.borderColor='';
-}
 
 // ── FILTROS POR CATEGORÍA ─────────────────────────────────────────────────
 var IFC_LABELS={'IfcSpace':'Habitaciones/Espacios','IfcWall':'Muros','IfcWallStandardCase':'Muros',
