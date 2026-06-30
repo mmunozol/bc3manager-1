@@ -543,7 +543,7 @@ html.dark .sri-snippet mark{background:rgba(59,130,246,.22);}
 <!-- HOME -->
 <div class="view active" id="v-home">
   <div class="topbar">
-    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.30</span></div>
+    <div class="logo">BC3 <em>Manager</em> <span id="dev-ind" style="font-size:9px;color:var(--muted);font-weight:400;margin-left:4px;">v2.31</span></div>
     <div class="tr">
       <button class="btn p" id="bn-np">
         <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1118,10 +1118,8 @@ function openVer(vid){
 function parseBC3(txt){
   var BC={c:{},h:{},d:{},m:{},g:{},t:{}};
   var asmRE=/^([A-Z]{2,5}-\d{3,4}(?:\.\d+)?)(?:\s|$)/;
-  // GUID IFC de 22 caracteres al final del comentario, en dos formatos:
-  //  - antiguo:  "...descripción - 4xY...Z"   (tras guion o espacio)
-  //  - nuevo:    "...descripción [4xY...Z]"    (entre corchetes)
-  var ifc22RE=/(?:\[([0-9A-Za-z_$]{22})\]|[\s\-]([0-9A-Za-z_$]{22}))\s*$/;
+  // GUID IFC de 22 caracteres SOLO entre corchetes al final: "...descripción [4xY...Z]"
+  var ifc22RE=/\[([0-9A-Za-z_$]{22})\]\s*$/;
   var raw=txt.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   var regs=[],cur='';
   raw.split('\n').forEach(function(l){if(l.charAt(0)==='~'){if(cur)regs.push(cur);cur=l;}else cur+='\n'+l;});
@@ -1204,8 +1202,8 @@ function pM(BC,s,asmRE,ifc22RE){
       BC.m[code].push({txt:txt,nd:nd,a:L,b:A,h:H,parc:parc});
       var m22=ifc22RE.exec(txt);
       if(m22){
-        var guid=m22[1]||m22[2];
-        // Texto descriptivo: quitar el GUID final (con sus corchetes/guion) y limpiar
+        var guid=m22[1];
+        // Texto descriptivo: quitar el "[GUID]" final y limpiar
         var esp=txt.slice(0,txt.lastIndexOf(m22[0])).replace(/[\s\-\[\]]+$/,'').trim();
         BC.g[code].push({ifc22:guid,esp:esp,type:'ifc22'});}
       var masm=asmRE.exec(txt);
